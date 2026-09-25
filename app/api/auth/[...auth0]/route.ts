@@ -8,7 +8,16 @@ export async function GET(
 ) {
   const { auth0 } = await params;
   const action = auth0?.[0] || "login";
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+  // Dynamically resolve appUrl so localhost:3000 works during local dev
+  // and production domains work in production
+  const host = req.headers.get("x-forwarded-host") || req.headers.get("host") || "";
+  const isLocal = host.includes("localhost") || host.includes("127.0.0.1");
+  const proto = req.headers.get("x-forwarded-proto") || (req.url.startsWith("https") ? "https" : "http");
+
+  const appUrl = isLocal
+    ? `http://${host}`
+    : (process.env.AUTH0_BASE_URL || (host ? `${proto}://${host}` : process.env.NEXT_PUBLIC_APP_URL) || "http://localhost:3000").replace(/\/$/, "");
 
   // When Auth0 is NOT configured, handle demo fallbacks
   if (!isAuth0Configured()) {

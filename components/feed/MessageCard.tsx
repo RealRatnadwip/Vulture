@@ -8,9 +8,10 @@ import { Clock, ShieldAlert } from "lucide-react";
 interface MessageCardProps {
   message: MessageWithSender;
   isNew?: boolean;
+  onTriggerAlert?: (message: MessageWithSender) => void;
 }
 
-export function MessageCard({ message, isNew }: MessageCardProps) {
+export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps) {
   const relevance = getMessageRelevance(message);
   const isCritical = message.priority === "CRITICAL";
   const isHigh = message.priority === "HIGH";
@@ -37,12 +38,17 @@ export function MessageCard({ message, isNew }: MessageCardProps) {
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="flex items-center gap-2">
           {isCritical && (
-            <div className="flex items-center gap-1.5">
+            <button
+              type="button"
+              onClick={() => onTriggerAlert?.(message)}
+              className="flex items-center gap-1.5 hover:opacity-85 transition-opacity cursor-pointer group"
+              title="Click to view full-screen emergency takeover"
+            >
               <span className="w-2 h-2 rounded-full bg-[#ff453a] critical-indicator" />
-              <span className="font-mono text-[11px] font-bold tracking-wider text-[#ff453a] uppercase">
-                CRITICAL PRIORITY
+              <span className="font-mono text-[11px] font-bold tracking-wider text-[#ff453a] uppercase group-hover:underline">
+                CRITICAL PRIORITY [TAP FOR ALERT]
               </span>
-            </div>
+            </button>
           )}
 
           {isHigh && (
