@@ -99,19 +99,17 @@ export async function GET(
       const profile = await userRes.json();
       const auth0Id = profile.sub; // e.g. "auth0|12345" or "google-oauth2|..."
 
-      // Check if user already exists in DB
+      // Ensure user exists in Postgres database
       let user = await getUserByAuth0Id(auth0Id);
+      const userId = user?.id || `usr_${auth0Id.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 36)}`;
 
-      if (!user) {
-        const newUserId = `usr_${auth0Id.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 36)}`;
-        user = await upsertUser({
-          id: newUserId,
-          auth0Id,
-          name: profile.name || profile.nickname || profile.email?.split("@")[0] || "Vulture User",
-          email: profile.email || null,
-          avatarUrl: profile.picture || null,
-        });
-      }
+      user = await upsertUser({
+        id: userId,
+        auth0Id,
+        name: profile.name || profile.nickname || profile.email?.split("@")[0] || "Vulture User",
+        email: profile.email || null,
+        avatarUrl: profile.picture || null,
+      });
 
       // Auto-join default squads so the new user immediately has active feeds & permissions
       try {

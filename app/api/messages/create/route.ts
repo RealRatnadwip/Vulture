@@ -93,20 +93,23 @@ export async function POST(req: NextRequest) {
     const messageId = `msg_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
 
     // 6. Persist message into PostgreSQL (or demo store)
-    const newMessage = await createBroadcastMessage({
-      id: messageId,
-      groupId,
-      senderId: user.id,
-      transcript,
-      summary: classification.summary,
-      priority: classification.priority,
-      category: classification.category,
-      urgencyScore: classification.urgencyScore,
-      durationMs: durationMs || null,
-      processingStatus: "READY",
-      createdAt: now,
-      expiresAt,
-    });
+    const newMessage = await createBroadcastMessage(
+      {
+        id: messageId,
+        groupId,
+        senderId: user.id,
+        transcript,
+        summary: classification.summary,
+        priority: classification.priority,
+        category: classification.category,
+        urgencyScore: classification.urgencyScore,
+        durationMs: durationMs || null,
+        processingStatus: "READY",
+        createdAt: now,
+        expiresAt,
+      },
+      user
+    );
 
     // 7. Return complete message
     return NextResponse.json({

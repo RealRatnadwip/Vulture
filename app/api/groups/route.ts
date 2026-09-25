@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: "Invalid invite code" }, { status: 400 });
       }
 
-      const result = await joinGroup(parsed.data.inviteCode, user.id);
+      const result = await joinGroup(parsed.data.inviteCode, user.id, user);
       if (!result.success) {
         return NextResponse.json({ error: result.error || "Could not join group" }, { status: 400 });
       }
@@ -56,7 +56,7 @@ export async function POST(req: NextRequest) {
     const prefix = parsed.data.name.replace(/[^A-Za-z]/g, "").slice(0, 4).toUpperCase() || "VULT";
     const inviteCode = `${prefix}-${randomSuffix}`;
 
-    const newGroup = await createGroup(parsed.data.name, inviteCode, user.id);
+    const newGroup = await createGroup(parsed.data.name, inviteCode, user.id, user);
     return NextResponse.json({ success: true, group: newGroup });
   } catch (error) {
     console.error("[POST /api/groups] Error:", error);
