@@ -1,6 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { DEMO_USERS, DEFAULT_DEMO_USER, getDemoUserById, DemoUser } from "./demo-users";
-import { getUserById, upsertUser } from "@/lib/db";
+import { getUserById, upsertUser, ensureDefaultGroupMemberships } from "@/lib/db";
 
 export interface AuthenticatedUser {
   id: string;
@@ -44,22 +44,64 @@ export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
   const headerStore = await headers();
 
   // 1. Check for real Auth0 session cookie first
-  const sessionUserId = cookieStore.get("vulture_session")?.value;
-  if (sessionUserId) {
+  const rawSession = cookieStore.get("vulture_session")?.value;
+  if (rawSession) {
     try {
-      const dbUser = await getUserById(sessionUserId);
-      if (dbUser) {
-        return {
-          id: dbUser.id,
-          name: dbUser.name,
-          email: dbUser.email,
-          avatarUrl: dbUser.avatarUrl,
-          auth0Id: dbUser.auth0Id,
-          isDemo: false,
-        };
+      let parsedUser: AuthenticatedUser | null = null;
+
+      // Handle self-contained base64 JSON payload
+      if (!rawSession.startsWith("usr_")) {
+        try {
+          const decoded = JSON.parse(Buffer.from(rawSession, "base64").toString("utf-8"));
+          if (decoded?.id && decoded?.auth0Id) {
+            parsedUser = {
+              id: decoded.id,
+              name: decoded.name || "Vulture User",
+              email: decoded.email || null,
+              avatarUrl: decoded.avatarUrl || null,
+              auth0Id: decoded.auth0Id,
+              isDemo: false,
+            };
+          }
+        } catch {
+          // not base64 json
+        }
+      }
+
+      // If not base64 json or failed, fallback to DB lookup
+      if (!parsedUser) {
+        const dbUser = await getUserById(rawSession);
+        if (dbUser) {
+          parsedUser = {
+            id: dbUser.id,
+            name: dbUser.name,
+            email: dbUser.email,
+            avatarUrl: dbUser.avatarUrl,
+            auth0Id: dbUser.auth0Id,
+            isDemo: false,
+          };
+        }
+      }
+
+      if (parsedUser) {
+        // Ensure user is registered in active database/memoryStore and has default groups
+        try {
+          await upsertUser({
+            id: parsedUser.id,
+            auth0Id: parsedUser.auth0Id,
+            name: parsedUser.name,
+            email: parsedUser.email,
+            avatarUrl: parsedUser.avatarUrl,
+          });
+          await ensureDefaultGroupMemberships(parsedUser.id);
+        } catch (err) {
+          console.warn("[Auth] Sync user state error:", err);
+        }
+
+        return parsedUser;
       }
     } catch (err) {
-      console.warn("[Auth] Error reading user by session id:", err);
+      console.warn("[Auth] Error reading user session:", err);
     }
   }
 

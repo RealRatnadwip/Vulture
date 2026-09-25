@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuth0Configured } from "@/lib/auth";
-import { getUserByAuth0Id, upsertUser } from "@/lib/db";
+import { getUserByAuth0Id, upsertUser, ensureDefaultGroupMemberships } from "@/lib/db";
 
 export async function GET(
   req: NextRequest,
@@ -104,14 +104,38 @@ export async function GET(
         });
       }
 
-      // Create session cookie with real user id
+      // Auto-join default squads so the new user immediately has active feeds & permissions
+      try {
+        await ensureDefaultGroupMemberships(user.id);
+      } catch (err) {
+        console.warn("[Auth0] Group auto-join error:", err);
+      }
+
+      // Encode self-contained session payload so serverless cold starts & memory stores never lose session
+      const sessionPayload = {
+        id: user.id,
+        auth0Id: user.auth0Id,
+        name: user.name,
+        email: user.email,
+        avatarUrl: user.avatarUrl,
+        createdAt: Date.now(),
+      };
+      const encodedSession = Buffer.from(JSON.stringify(sessionPayload)).toString("base64");
+
+      // Check if connection is actually HTTPS before forcing secure: true (prevents cookie drops over HTTP)
+      const isHttps =
+        req.nextUrl.protocol === "https:" ||
+        req.headers.get("x-forwarded-proto") === "https" ||
+        appUrl.startsWith("https://");
+
+      // Create session cookie with real user profile
       const response = NextResponse.redirect(new URL("/dashboard", appUrl));
       response.cookies.set({
         name: "vulture_session",
-        value: user.id,
+        value: encodedSession,
         path: "/",
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure: isHttps,
         maxAge: 60 * 60 * 24 * 7, // 7 days
         sameSite: "lax",
       });
