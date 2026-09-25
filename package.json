@@ -10,7 +10,9 @@
     "db:generate": "drizzle-kit generate",
     "db:migrate": "tsx lib/db/migrate.ts",
     "db:push": "drizzle-kit push",
-    "db:seed": "tsx lib/db/seed.ts"
+    "db:seed": "tsx lib/db/seed.ts",
+    "db:clean": "tsx lib/db/clean.ts",
+    "db:reset": "tsx lib/db/clean.ts && tsx lib/db/seed.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.0",

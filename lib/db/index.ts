@@ -1,3 +1,4 @@
+import "./load-env";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import { eq, desc, and, gt } from "drizzle-orm";
@@ -27,8 +28,8 @@ let db: ReturnType<typeof drizzle> | null = null;
 try {
   sql = postgres(connectionString, {
     max: 10,
-    idle_timeout: 20,
-    connect_timeout: 2,
+    idle_timeout: 30,
+    connect_timeout: 15,
     max_lifetime: 60 * 30,
     onnotice: () => {},
   });
@@ -314,7 +315,7 @@ export async function verifyGroupMembership(groupId: string, userId: string): Pr
         .from(schema.groupMembers)
         .where(and(eq(schema.groupMembers.groupId, groupId), eq(schema.groupMembers.userId, userId)))
         .limit(1);
-      return rows.length > 0;
+      if (rows.length > 0) return true;
     } catch (err) {
       console.warn("[db] postgres verifyGroupMembership error:", err);
     }
@@ -334,9 +335,8 @@ export async function listUserGroups(userId: string): Promise<Array<schema.Group
         .where(eq(schema.groupMembers.userId, userId));
 
       const groupIds = memberRows.map((m) => m.groupId);
-      if (groupIds.length === 0) return [];
 
-      const groupList = await db.select().from(schema.groups);
+      const groupList = groupIds.length > 0 ? await db.select().from(schema.groups) : [];
       const results: Array<schema.Group & { memberCount: number; onlineCount: number }> = [];
 
       const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
@@ -354,6 +354,19 @@ export async function listUserGroups(userId: string): Promise<Array<schema.Group
           onlineCount: Math.max(1, online),
         });
       }
+
+      // Check if user also has any groups created in memory store and merge them
+      for (const group of memoryStore.groups.values()) {
+        if (results.some((r) => r.id === group.id)) continue;
+        if (memoryStore.members.has(`${group.id}_${userId}`)) {
+          results.push({
+            ...group,
+            memberCount: 1,
+            onlineCount: 1,
+          });
+        }
+      }
+
       return results;
     } catch (err) {
       console.warn("[db] postgres listUserGroups error:", err);
@@ -391,7 +404,7 @@ export async function getGroupById(groupId: string): Promise<schema.Group | null
   if (health.type === "postgres" && db) {
     try {
       const rows = await db.select().from(schema.groups).where(eq(schema.groups.id, groupId)).limit(1);
-      return rows[0] || null;
+      if (rows[0]) return rows[0];
     } catch (err) {
       console.warn("[db] postgres getGroupById error:", err);
     }
@@ -405,7 +418,7 @@ export async function getGroupByInviteCode(inviteCode: string): Promise<schema.G
   if (health.type === "postgres" && db) {
     try {
       const rows = await db.select().from(schema.groups).where(eq(schema.groups.inviteCode, code)).limit(1);
-      return rows[0] || null;
+      if (rows[0]) return rows[0];
     } catch (err) {
       console.warn("[db] postgres getGroupByInviteCode error:", err);
     }
@@ -442,7 +455,17 @@ export async function createGroup(name: string, inviteCode: string, creatorUserI
         lastSeenAt: new Date(),
       });
 
-      return inserted[0];
+      const created = inserted[0];
+      memoryStore.groups.set(id, created);
+      memoryStore.members.set(`${id}_${creatorUserId}`, {
+        id: `mem_${id}_${creatorUserId}`,
+        groupId: id,
+        userId: creatorUserId,
+        joinedAt: new Date(),
+        lastSeenAt: new Date(),
+      });
+
+      return created;
     } catch (err) {
       console.warn("[db] postgres createGroup error:", err);
     }
@@ -592,10 +615,12 @@ export async function getGroupMessages(
         .limit(limit);
 
       const rows = await query;
-      return rows.map((r) => ({
-        ...r.message,
-        sender: r.sender,
-      }));
+      if (rows.length > 0) {
+        return rows.map((r) => ({
+          ...r.message,
+          sender: r.sender,
+        }));
+      }
     } catch (err) {
       console.warn("[db] postgres getGroupMessages error:", err);
     }
@@ -636,6 +661,10 @@ export async function createBroadcastMessage(data: schema.NewMessage): Promise<M
       const inserted = await db.insert(schema.messages).values(data).returning();
       const message = inserted[0];
       const sender = await getUserById(message.senderId);
+      
+      // Mirror to memory store
+      memoryStore.messages.set(message.id, message);
+
       return {
         ...message,
         sender: {

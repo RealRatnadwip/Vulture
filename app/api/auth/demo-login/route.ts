@@ -21,6 +21,25 @@ export async function POST(req: NextRequest) {
       sameSite: "lax",
     });
 
+    const sessionPayload = {
+      id: user.id,
+      auth0Id: user.auth0Id,
+      name: user.name,
+      email: user.email,
+      avatarUrl: user.avatarUrl,
+      isDemo: true,
+      createdAt: Date.now(),
+    };
+
+    response.cookies.set({
+      name: "vulture_session",
+      value: Buffer.from(JSON.stringify(sessionPayload)).toString("base64"),
+      path: "/",
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 7 days
+      sameSite: "lax",
+    });
+
     return response;
   } catch (error) {
     return NextResponse.json({ error: "Failed to switch user" }, { status: 400 });

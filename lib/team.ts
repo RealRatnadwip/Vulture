@@ -34,7 +34,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Frontend Architect & Interactions",
     handle: "@himanshu",
     bio: "Obsessed with 120fps micro-interactions, dark brutalist aesthetics, and audio waveform responsiveness.",
-    image: "/members/img/member2.png",
+    image: "",
     links: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",
@@ -48,7 +48,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Systems Specialist & Backend",
     handle: "@koushik",
     bio: "Maintains real-time database queries, presence heartbeats, and time-decay relevance calculation algorithms.",
-    image: "/members/img/member3.png",
+    image: "",
     links: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",
@@ -62,7 +62,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     role: "Product & Visual Design",
     handle: "@ranit",
     bio: "Designed Vulture's technical monospace identity, urgency visual hierarchy, and high-contrast editorial look.",
-    image: "/members/img/member4.png",
+    image: "",
     links: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",
@@ -72,16 +72,16 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     id: "member5",
-    name: "Ranit",
-    role: "Product & Visual Design",
-    handle: "@ranit",
-    bio: "Designed Vulture's technical monospace identity, urgency visual hierarchy, and high-contrast editorial look.",
-    image: "/members/img/member4.png",
+    name: "Agniswar Paul",
+    role: "DevOps & Cloud Infrastructure",
+    handle: "@agniswar",
+    bio: "Oversees containerized deployments, cloud database high availability, and network routing resilience.",
+    image: "",
     links: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",
       instagram: "https://instagram.com",
     },
-    tags: ["Design System", "Editorial UX", "Brutalism"],
+    tags: ["Docker", "Tiger Data", "Edge Infra"],
   }
 ];
