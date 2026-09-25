@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { DEMO_USERS } from "@/lib/auth/demo-users";
-import { Radio, ArrowRight, UserCheck, ShieldCheck, Loader2 } from "lucide-react";
+import { Radio, ArrowRight, UserCheck, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
