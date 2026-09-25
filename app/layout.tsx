@@ -12,10 +12,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="bg-[#0e0e0e] text-[#f1f1ef] min-h-screen flex flex-col antialiased selection:bg-[#d7f24a] selection:text-[#0e0e0e]">
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body
+        className="bg-[#0e0e0e] text-[#f1f1ef] min-h-screen flex flex-col antialiased selection:bg-[#d7f24a] selection:text-[#0e0e0e]"
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
+
   );
 }

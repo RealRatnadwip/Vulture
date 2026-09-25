@@ -67,7 +67,10 @@ export function MessageCard({ message, isNew }: MessageCardProps) {
         {/* Relevance / Time indicator */}
         <div className="flex items-center gap-1 text-[11px] font-mono text-[#666666]">
           <Clock className="w-3 h-3" />
-          <span className={relevance.state === "EXPIRING" ? "text-[#ff9f0a]" : ""}>
+          <span
+            className={relevance.state === "EXPIRING" ? "text-[#ff9f0a]" : ""}
+            suppressHydrationWarning
+          >
             {relevance.label}
           </span>
         </div>
@@ -79,10 +82,11 @@ export function MessageCard({ message, isNew }: MessageCardProps) {
           {message.sender.name}
         </span>
         <span className="text-[#444444]">·</span>
-        <time className="text-[#777777] font-mono text-[11px]">
+        <time className="text-[#777777] font-mono text-[11px]" suppressHydrationWarning>
           {formatBroadcastTime(message.createdAt)}
         </time>
       </div>
+
 
       {/* Transcript / Spoken content */}
       <div className="mb-3">
