@@ -1,10 +1,7 @@
-import { defineConfig } from "drizzle-kit";
 import fs from "node:fs";
 import path from "node:path";
 
-function getDatabaseUrl(): string {
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-
+export function loadEnvLocal(): void {
   const envPath = path.resolve(process.cwd(), ".env.local");
   if (fs.existsSync(envPath)) {
     const content = fs.readFileSync(envPath, "utf-8");
@@ -15,22 +12,12 @@ function getDatabaseUrl(): string {
       if (eqIdx !== -1) {
         const key = line.slice(0, eqIdx).trim();
         const val = line.slice(eqIdx + 1).trim().replace(/^['"]|['"]$/g, "");
-        if (key === "DATABASE_URL") {
-          return val;
+        if (!process.env[key]) {
+          process.env[key] = val;
         }
       }
     }
   }
-  return "postgresql://postgres:postgres@localhost:5432/vulture";
 }
 
-export default defineConfig({
-  schema: "./drizzle/schema.ts",
-  out: "./drizzle/migrations",
-  dialect: "postgresql",
-  tablesFilter: ["users", "groups", "group_members", "messages"],
-  dbCredentials: {
-    url: getDatabaseUrl(),
-  },
-});
-
+loadEnvLocal();

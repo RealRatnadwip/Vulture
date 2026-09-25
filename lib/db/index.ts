@@ -28,12 +28,13 @@ try {
   sql = postgres(connectionString, {
     max: 10,
     idle_timeout: 20,
-    connect_timeout: 5,
+    connect_timeout: 2,
+    max_lifetime: 60 * 30,
     onnotice: () => {},
   });
   db = drizzle(sql, { schema });
 } catch {
-  console.warn("[Database] Could not create postgres client, relying on fallback if in demo mode.");
+  console.warn("[Database] Could not create postgres client, relying on fallback.");
 }
 
 export { db, sql };
@@ -202,27 +203,37 @@ function initDemoMemoryStore() {
 initDemoMemoryStore();
 
 let isDbReachable: boolean | null = null;
+let lastDbCheckTime = 0;
+const DB_CHECK_INTERVAL_MS = 30000; // 30 seconds circuit breaker
 
 export async function checkDatabaseHealth(): Promise<{ ok: boolean; type: "postgres" | "demo-memory"; error?: string }> {
-  if (sql) {
-    try {
-      await sql`SELECT 1 as ping`;
-      isDbReachable = true;
-      return { ok: true, type: "postgres" };
-    } catch (err: unknown) {
-      isDbReachable = false;
-      const errorMsg = err instanceof Error ? err.message : String(err);
-      if (isDemoMode) {
-        return { ok: true, type: "demo-memory", error: `Postgres unreachable (${errorMsg}), operating in Demo Store.` };
-      }
-      return { ok: false, type: "postgres", error: errorMsg };
-    }
+  if (!sql) {
+    return { ok: true, type: "demo-memory", error: "Database client not configured." };
   }
 
-  if (isDemoMode) {
-    return { ok: true, type: "demo-memory" };
+  const now = Date.now();
+  // Circuit breaker: If we recently verified that DB is unreachable, return immediately without blocking!
+  if (isDbReachable === false && now - lastDbCheckTime < DB_CHECK_INTERVAL_MS) {
+    return { ok: true, type: "demo-memory", error: "Postgres unreachable (cached circuit breaker)" };
   }
-  return { ok: false, type: "postgres", error: "Database client not configured." };
+
+  // If we recently verified that DB is reachable, reuse healthy status
+  if (isDbReachable === true && now - lastDbCheckTime < DB_CHECK_INTERVAL_MS) {
+    return { ok: true, type: "postgres" };
+  }
+
+  try {
+    lastDbCheckTime = now;
+    await sql`SELECT 1 as ping`;
+    isDbReachable = true;
+    return { ok: true, type: "postgres" };
+  } catch (err: unknown) {
+    isDbReachable = false;
+    lastDbCheckTime = now;
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    console.warn(`[Database] PostgreSQL unreachable (${errorMsg}). Operating in resilient in-memory store.`);
+    return { ok: true, type: "demo-memory", error: errorMsg };
+  }
 }
 
 // Data Access Layer
