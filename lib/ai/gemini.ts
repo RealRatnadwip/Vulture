@@ -72,9 +72,10 @@ Analyze this transcript and return strict JSON.`;
   for (let attempt = 1; attempt <= 2; attempt++) {
     try {
       const genAI = new GoogleGenerativeAI(apiKey);
-      // Try gemini-1.5-flash or gemini-2.0-flash
+      // Gemini 3.5 Flash Lite is ultra-fast, high-availability, and fully supported
+      const modelName = process.env.GEMINI_MODEL || (attempt === 1 ? "gemini-3.5-flash-lite" : "gemini-3.8-flash");
       const model = genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+        model: modelName,
         systemInstruction: GEMINI_SYSTEM_PROMPT,
         generationConfig: {
           responseMimeType: "application/json",

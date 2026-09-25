@@ -22,6 +22,15 @@ export async function GET(
   // When Auth0 is NOT configured, handle demo fallbacks
   if (!isAuth0Configured()) {
     if (action === "logout") {
+      const isPrefetch =
+        req.headers.get("purpose") === "prefetch" ||
+        req.headers.get("sec-purpose") === "prefetch" ||
+        req.headers.get("next-router-prefetch") === "1" ||
+        req.headers.get("x-middleware-prefetch") === "1";
+      if (isPrefetch) {
+        return new NextResponse(null, { status: 204 });
+      }
+
       const response = NextResponse.redirect(new URL("/login", appUrl));
       response.cookies.delete("vulture_demo_user");
       response.cookies.delete("vulture_session");
@@ -149,6 +158,15 @@ export async function GET(
 
   // 3. LOGOUT: Clear session and redirect to Auth0 logout endpoint
   if (action === "logout") {
+    const isPrefetch =
+      req.headers.get("purpose") === "prefetch" ||
+      req.headers.get("sec-purpose") === "prefetch" ||
+      req.headers.get("next-router-prefetch") === "1" ||
+      req.headers.get("x-middleware-prefetch") === "1";
+    if (isPrefetch) {
+      return new NextResponse(null, { status: 204 });
+    }
+
     const returnTo = `${appUrl}/login`;
     const logoutUrl = `https://${domain}/v2/logout?client_id=${clientId}&returnTo=${encodeURIComponent(returnTo)}`;
     const response = NextResponse.redirect(logoutUrl);

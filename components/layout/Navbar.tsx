@@ -82,13 +82,13 @@ export function Navbar({ userName = "Ratnadwip", avatarUrl, isDemo = true }: Nav
             <span className="hidden sm:inline text-xs text-[#cccccc] font-medium">{userName}</span>
           </div>
 
-          <Link
+          <a
             href="/api/auth/logout"
             className="p-1.5 text-[#777777] hover:text-[#f1f1ef] hover:bg-[#1a1a1a] rounded transition-colors"
             title="Sign Out"
           >
             <LogOut className="w-3.5 h-3.5" />
-          </Link>
+          </a>
         </div>
       </div>
     </header>

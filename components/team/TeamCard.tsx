@@ -22,7 +22,7 @@ export function TeamCard({ member, className = "" }: TeamCardProps) {
       <div>
         {/* Square Avatar Container */}
         <div className="relative aspect-square w-full rounded-lg overflow-hidden bg-[#181818] border border-[#242424] mb-4 flex items-center justify-center">
-          {!imageError ? (
+          {member.image && !imageError ? (
             <img
               src={member.image}
               alt={member.name}

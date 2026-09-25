@@ -84,20 +84,6 @@ export async function getCurrentUser(): Promise<AuthenticatedUser | null> {
       }
 
       if (parsedUser) {
-        // Ensure user is registered in active database/memoryStore and has default groups
-        try {
-          await upsertUser({
-            id: parsedUser.id,
-            auth0Id: parsedUser.auth0Id,
-            name: parsedUser.name,
-            email: parsedUser.email,
-            avatarUrl: parsedUser.avatarUrl,
-          });
-          await ensureDefaultGroupMemberships(parsedUser.id);
-        } catch (err) {
-          console.warn("[Auth] Sync user state error:", err);
-        }
-
         return parsedUser;
       }
     } catch (err) {
