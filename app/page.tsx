@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Radio, ArrowRight, Mic, ShieldAlert, Clock, Sparkles, Terminal, Users, Cpu, ArrowUpRight } from "lucide-react";
 import { TEAM_MEMBERS } from "@/lib/team";
 import { TeamCard } from "@/components/team/TeamCard";
+import { TeamScroller } from "@/components/team/TeamScroller";
 import { DecaySimulator } from "@/components/landing/DecaySimulator";
 import { VoiceHeroDemo } from "@/components/landing/VoiceHeroDemo";
 
@@ -229,12 +230,8 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* 4 Team Member Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {TEAM_MEMBERS.map((member) => (
-              <TeamCard key={member.id} member={member} />
-            ))}
-          </div>
+          {/* Side-Scrollable Team Cards */}
+          <TeamScroller />
         </div>
 
         {/* Bottom Banner */}

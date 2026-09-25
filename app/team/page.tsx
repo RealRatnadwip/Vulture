@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { TEAM_MEMBERS } from "@/lib/team";
-import { TeamCard } from "@/components/team/TeamCard";
+import { TeamScroller } from "@/components/team/TeamScroller";
 import { Radio, ArrowLeft, ArrowRight, Sparkles, Terminal } from "lucide-react";
 
 export const metadata = {
@@ -68,12 +68,8 @@ export default function TeamPage() {
           </p>
         </div>
 
-        {/* Team Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {TEAM_MEMBERS.map((member) => (
-            <TeamCard key={member.id} member={member} />
-          ))}
-        </div>
+        {/* Side-Scrollable Team Cards */}
+        <TeamScroller />
 
         {/* Culture / Philosophy Box */}
         <div className="mt-16 p-6 sm:p-8 rounded-xl bg-[#121212] border border-[#1f1f1f] flex flex-col md:flex-row items-start md:items-center justify-between gap-6">

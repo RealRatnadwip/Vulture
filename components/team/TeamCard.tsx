@@ -8,13 +8,14 @@ import { ArrowUpRight } from "lucide-react";
 
 interface TeamCardProps {
   member: TeamMember;
+  className?: string;
 }
 
-export function TeamCard({ member }: TeamCardProps) {
+export function TeamCard({ member, className = "" }: TeamCardProps) {
   const [imageError, setImageError] = useState(false);
 
   return (
-    <div className="group relative rounded-xl bg-[#131313] border border-[#222222] hover:border-[#383838] transition-all duration-300 p-5 flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-[0_0_30px_rgba(215,242,74,0.06)]">
+    <div className={`group relative rounded-xl bg-[#131313] border border-[#222222] hover:border-[#383838] transition-all duration-300 p-5 flex flex-col justify-between overflow-hidden shadow-lg hover:shadow-[0_0_30px_rgba(215,242,74,0.06)] ${className}`}>
       {/* Subtle top indicator bar */}
       <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[#d7f24a]/0 to-transparent group-hover:via-[#d7f24a]/80 transition-all duration-500" />
 
