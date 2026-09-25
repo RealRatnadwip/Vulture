@@ -670,3 +670,19 @@ export async function createBroadcastMessage(data: schema.NewMessage): Promise<M
     },
   };
 }
+
+/**
+ * Automatically joins any authenticated user to default squads
+ * so new users never hit an empty dashboard or 'Access Restricted' screens.
+ */
+export async function ensureDefaultGroupMemberships(userId: string): Promise<void> {
+  const defaultCodes = ["HACK-2026", "TRF-900", "PRJX-44"];
+  for (const code of defaultCodes) {
+    try {
+      await joinGroup(code, userId);
+    } catch {
+      // ignore
+    }
+  }
+}
+

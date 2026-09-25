@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { MessageWithSender } from "@/lib/db";
 import { MessageCard } from "./MessageCard";
 import { FeedFilters, FilterType } from "./FeedFilters";
+import { FullScreenAlert } from "@/components/mobile/FullScreenAlert";
 import { Radio } from "lucide-react";
 
 interface BroadcastFeedProps {
@@ -17,6 +18,7 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
   const [searchQuery, setSearchQuery] = useState("");
   const [newestId, setNewestId] = useState<string | null>(null);
   const [loadingInitial, setLoadingInitial] = useState(initialMessages.length === 0);
+  const [fullScreenAlert, setFullScreenAlert] = useState<MessageWithSender | null>(null);
 
   const latestTimestampRef = useRef<string | null>(
     initialMessages.length > 0 ? new Date(initialMessages[0].createdAt).toISOString() : null
@@ -46,6 +48,14 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
 
             // Highlight the newest message
             setNewestId(fresh[0].id);
+
+            // Trigger full-screen mobile takeover alert for CRITICAL / high-urgency broadcasts
+            const critical = fresh.find(
+              (m) => m.priority === "CRITICAL" || (m.urgencyScore && m.urgencyScore >= 80)
+            );
+            if (critical) {
+              setFullScreenAlert(critical);
+            }
 
             const merged = [...fresh, ...prev];
             merged.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -162,10 +172,23 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
           </div>
         ) : (
           filteredMessages.map((msg) => (
-            <MessageCard key={msg.id} message={msg} isNew={msg.id === newestId} />
+            <MessageCard
+              key={msg.id}
+              message={msg}
+              isNew={msg.id === newestId}
+              onTriggerAlert={setFullScreenAlert}
+            />
           ))
         )}
       </div>
+
+      {/* Full-Screen Mobile Takeover Alert for Critical Incidents */}
+      {fullScreenAlert && (
+        <FullScreenAlert
+          message={fullScreenAlert}
+          onDismiss={() => setFullScreenAlert(null)}
+        />
+      )}
     </div>
   );
 }

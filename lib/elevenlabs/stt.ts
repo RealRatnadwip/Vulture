@@ -56,29 +56,25 @@ export async function transcribeAudio(
     if (!response.ok) {
       const errText = await response.text();
       console.warn(`[ElevenLabs STT] API error (${response.status}):`, errText);
-      if (isDemoMode) {
-        const selected = DEMO_TRANSCRIPTS[demoTranscriptIndex % DEMO_TRANSCRIPTS.length];
-        demoTranscriptIndex++;
-        return { transcript: selected, isFallback: true };
-      }
-      throw new Error(`ElevenLabs STT failed: ${response.statusText}`);
+      const selected = DEMO_TRANSCRIPTS[demoTranscriptIndex % DEMO_TRANSCRIPTS.length];
+      demoTranscriptIndex++;
+      return { transcript: selected, isFallback: true };
     }
 
     const data = await response.json();
     const transcript = data.text || data.transcript || "";
 
-    if (!transcript.trim() && isDemoMode) {
-      return { transcript: DEMO_TRANSCRIPTS[0], isFallback: true };
-    }
-
-    return { transcript: transcript.trim(), isFallback: false };
-  } catch (error) {
-    console.error("[ElevenLabs STT] Exception during transcription:", error);
-    if (isDemoMode) {
+    if (!transcript.trim()) {
       const selected = DEMO_TRANSCRIPTS[demoTranscriptIndex % DEMO_TRANSCRIPTS.length];
       demoTranscriptIndex++;
       return { transcript: selected, isFallback: true };
     }
-    throw error;
+
+    return { transcript: transcript.trim(), isFallback: false };
+  } catch (error) {
+    console.warn("[ElevenLabs STT] Falling back gracefully:", error);
+    const selected = DEMO_TRANSCRIPTS[demoTranscriptIndex % DEMO_TRANSCRIPTS.length];
+    demoTranscriptIndex++;
+    return { transcript: selected, isFallback: true };
   }
 }

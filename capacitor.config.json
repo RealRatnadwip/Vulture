@@ -1,0 +1,30 @@
+{
+  "appId": "com.vulture.broadcast",
+  "appName": "Vulture",
+  "webDir": "public",
+  "server": {
+    "url": "https://vulture-taupe.vercel.app",
+    "cleartext": true,
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "launchAutoHide": true,
+      "backgroundColor": "#0E0E0E",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0E0E0E"
+    },
+    "LocalNotifications": {
+      "smallIcon": "ic_stat_vulture",
+      "iconColor": "#D7F24A"
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+}
