@@ -12,9 +12,17 @@
     "db:push": "drizzle-kit push",
     "db:seed": "tsx lib/db/seed.ts",
     "db:clean": "tsx lib/db/clean.ts",
-    "db:reset": "tsx lib/db/clean.ts && tsx lib/db/seed.ts"
+    "db:reset": "tsx lib/db/clean.ts && tsx lib/db/seed.ts",
+    "cap:sync": "cap sync android",
+    "cap:open": "cap open android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3",
     "@google/generative-ai": "^0.24.0",
     "clsx": "^2.1.1",
     "drizzle-orm": "^0.38.4",

@@ -140,6 +140,11 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
       setState("RECORDING");
       setDuration(0);
 
+      // Native mobile tactile feedback for PTT activation
+      if (typeof window !== "undefined" && "vibrate" in navigator) {
+        try { navigator.vibrate(45); } catch {}
+      }
+
       timerRef.current = setInterval(() => {
         setDuration(Math.floor((Date.now() - startTimeRef.current) / 1000));
       }, 200);
@@ -156,6 +161,11 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
   };
 
   const stopRecording = () => {
+    // Release tactile pulse on mobile
+    if (typeof window !== "undefined" && "vibrate" in navigator) {
+      try { navigator.vibrate(25); } catch {}
+    }
+
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
