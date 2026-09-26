@@ -21,16 +21,22 @@ export type Message = schema.Message;
 const connectionString = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/vulture";
 const isDemoMode = process.env.DEMO_MODE === "true";
 
+const isCloudDb =
+  connectionString.includes("timescale.com") ||
+  connectionString.includes("neon.tech") ||
+  connectionString.includes("sslmode=require");
+
 // Global postgres client singleton
 let sql: ReturnType<typeof postgres> | null = null;
 let db: ReturnType<typeof drizzle> | null = null;
 
 try {
   sql = postgres(connectionString, {
-    max: 10,
+    max: process.env.VERCEL ? 3 : 10,
     idle_timeout: 30,
     connect_timeout: 15,
     max_lifetime: 60 * 30,
+    ssl: isCloudDb ? { rejectUnauthorized: false } : undefined,
     onnotice: () => {},
   });
   db = drizzle(sql, { schema });
@@ -429,13 +435,42 @@ export async function getGroupByInviteCode(inviteCode: string): Promise<schema.G
   return null;
 }
 
-export async function createGroup(name: string, inviteCode: string, creatorUserId: string): Promise<schema.Group> {
+export async function createGroup(
+  name: string,
+  inviteCode: string,
+  creatorUserId: string,
+  creatorUser?: { id: string; name?: string; email?: string | null; avatarUrl?: string | null; auth0Id?: string }
+): Promise<schema.Group> {
   const id = `grp_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
   const code = inviteCode.trim().toUpperCase();
   const health = await checkDatabaseHealth();
 
   if (health.type === "postgres" && db) {
     try {
+      // 1. Guarantee creator user row exists in postgres table to avoid foreign key violations
+      if (creatorUser) {
+        await db
+          .insert(schema.users)
+          .values({
+            id: creatorUserId,
+            auth0Id: creatorUser.auth0Id || `usr_${creatorUserId}`,
+            name: creatorUser.name || "Vulture User",
+            email: creatorUser.email || null,
+            avatarUrl: creatorUser.avatarUrl || null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .onConflictDoUpdate({
+            target: schema.users.auth0Id,
+            set: {
+              name: creatorUser.name || "Vulture User",
+              email: creatorUser.email || null,
+              avatarUrl: creatorUser.avatarUrl || null,
+              updatedAt: new Date(),
+            },
+          });
+      }
+
       const inserted = await db
         .insert(schema.groups)
         .values({
@@ -467,7 +502,10 @@ export async function createGroup(name: string, inviteCode: string, creatorUserI
 
       return created;
     } catch (err) {
-      console.warn("[db] postgres createGroup error:", err);
+      console.error("[db] postgres createGroup error:", err);
+      if (!isDemoMode) {
+        throw new Error(err instanceof Error ? err.message : "Failed to persist group to database");
+      }
     }
   }
 
@@ -489,7 +527,11 @@ export async function createGroup(name: string, inviteCode: string, creatorUserI
   return newGroup;
 }
 
-export async function joinGroup(inviteCode: string, userId: string): Promise<{ success: boolean; group?: schema.Group; error?: string }> {
+export async function joinGroup(
+  inviteCode: string,
+  userId: string,
+  userDetails?: { name?: string; email?: string | null; avatarUrl?: string | null; auth0Id?: string }
+): Promise<{ success: boolean; group?: schema.Group; error?: string }> {
   const group = await getGroupByInviteCode(inviteCode);
   if (!group) {
     return { success: false, error: "Invalid group invite code." };
@@ -503,6 +545,29 @@ export async function joinGroup(inviteCode: string, userId: string): Promise<{ s
   const health = await checkDatabaseHealth();
   if (health.type === "postgres" && db) {
     try {
+      if (userDetails) {
+        await db
+          .insert(schema.users)
+          .values({
+            id: userId,
+            auth0Id: userDetails.auth0Id || `usr_${userId}`,
+            name: userDetails.name || "Vulture User",
+            email: userDetails.email || null,
+            avatarUrl: userDetails.avatarUrl || null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .onConflictDoUpdate({
+            target: schema.users.auth0Id,
+            set: {
+              name: userDetails.name || "Vulture User",
+              email: userDetails.email || null,
+              avatarUrl: userDetails.avatarUrl || null,
+              updatedAt: new Date(),
+            },
+          });
+      }
+
       await db.insert(schema.groupMembers).values({
         id: `mem_${group.id}_${userId}`,
         groupId: group.id,
@@ -512,7 +577,10 @@ export async function joinGroup(inviteCode: string, userId: string): Promise<{ s
       });
       return { success: true, group };
     } catch (err) {
-      console.warn("[db] postgres joinGroup error:", err);
+      console.error("[db] postgres joinGroup error:", err);
+      if (!isDemoMode) {
+        return { success: false, error: err instanceof Error ? err.message : "Failed to join group in database" };
+      }
     }
   }
 
@@ -653,11 +721,29 @@ export async function getGroupMessages(
   return list.slice(0, limit);
 }
 
-export async function createBroadcastMessage(data: schema.NewMessage): Promise<MessageWithSender> {
+export async function createBroadcastMessage(
+  data: schema.NewMessage,
+  senderUser?: { id: string; name?: string; email?: string | null; avatarUrl?: string | null; auth0Id?: string }
+): Promise<MessageWithSender> {
   const health = await checkDatabaseHealth();
 
   if (health.type === "postgres" && db) {
     try {
+      if (senderUser) {
+        await db
+          .insert(schema.users)
+          .values({
+            id: data.senderId,
+            auth0Id: senderUser.auth0Id || `usr_${data.senderId}`,
+            name: senderUser.name || "Member",
+            email: senderUser.email || null,
+            avatarUrl: senderUser.avatarUrl || null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          })
+          .onConflictDoNothing();
+      }
+
       const inserted = await db.insert(schema.messages).values(data).returning();
       const message = inserted[0];
       const sender = await getUserById(message.senderId);
@@ -674,7 +760,10 @@ export async function createBroadcastMessage(data: schema.NewMessage): Promise<M
         },
       };
     } catch (err) {
-      console.warn("[db] postgres createBroadcastMessage error:", err);
+      console.error("[db] postgres createBroadcastMessage error:", err);
+      if (!isDemoMode) {
+        throw new Error(err instanceof Error ? err.message : "Failed to persist broadcast to database");
+      }
     }
   }
 
