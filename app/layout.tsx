@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ScreenFlashOverlay } from "@/components/ui/ScreenFlashOverlay";
 
 export const metadata: Metadata = {
   title: "VULTURE — Voice-First, Time-Aware Group Broadcasting",
@@ -18,8 +19,8 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         {children}
+        <ScreenFlashOverlay />
       </body>
     </html>
-
   );
 }
