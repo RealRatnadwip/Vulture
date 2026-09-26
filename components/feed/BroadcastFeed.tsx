@@ -37,7 +37,13 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
           : `/api/messages?groupId=${groupId}`;
 
         const res = await fetch(url);
-        if (!res.ok) return;
+        if (!res.ok) {
+          if (res.status === 401) {
+            isMounted = false;
+            clearInterval(interval);
+          }
+          return;
+        }
 
         const data = await res.json();
         const incoming: MessageWithSender[] = data.messages || [];

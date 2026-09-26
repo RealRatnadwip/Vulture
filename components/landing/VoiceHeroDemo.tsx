@@ -186,6 +186,11 @@ export function VoiceHeroDemo() {
           audioStreamRef.current.getTracks().forEach((t) => t.stop());
           audioStreamRef.current = null;
         }
+        if (audioBlob.size < 600) {
+          setErrorMessage("Recording too brief — please speak for at least 1 second.");
+          setState("IDLE");
+          return;
+        }
         await runPipeline({ audioBlob });
       };
 

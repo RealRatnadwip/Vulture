@@ -33,6 +33,12 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
   }, []);
 
   const sendAudioToServer = useCallback(async (audioBlob: Blob, recordingDurationMs: number) => {
+    if (audioBlob.size < 600 || recordingDurationMs < 400) {
+      setErrorMsg("Audio too short — please speak for at least 1 second.");
+      setState("IDLE");
+      return;
+    }
+
     setState("PROCESSING");
     setErrorMsg(null);
 
@@ -182,39 +188,30 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
     }
   };
 
-  const handleMouseDown = () => {
+  const pressStartRef = useRef<number>(0);
+
+  const handlePointerDown = () => {
     if (disabled || state !== "IDLE") return;
+    pressStartRef.current = Date.now();
     isHoldingRef.current = true;
     startRecording();
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
+    const elapsed = Date.now() - pressStartRef.current;
     if (isHoldingRef.current && state === "RECORDING") {
       isHoldingRef.current = false;
-      stopRecording();
-    }
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault();
-    if (disabled || state !== "IDLE") return;
-    isHoldingRef.current = true;
-    startRecording();
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    e.preventDefault();
-    if (isHoldingRef.current && state === "RECORDING") {
-      isHoldingRef.current = false;
-      stopRecording();
+      // If held for >= 500ms, stop on release (push-to-talk)
+      if (elapsed >= 500) {
+        stopRecording();
+      }
+      // If quick tap (< 500ms), keep recording until user taps FINISH
     }
   };
 
   const handleMicClick = () => {
     if (state === "RECORDING") {
       stopRecording();
-    } else if (state === "IDLE") {
-      startRecording();
     }
   };
 
@@ -328,10 +325,9 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
           ) : (
             <button
               type="button"
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
+              onPointerDown={handlePointerDown}
+              onPointerUp={handlePointerUp}
+              onPointerLeave={handlePointerUp}
               onClick={handleMicClick}
               disabled={disabled || isBusy}
               title="Click or hold to broadcast voice"
