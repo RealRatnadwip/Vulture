@@ -18,6 +18,7 @@ export async function GET() {
     speech: elevenLabsConfigured || demoActive,
     services: {
       tigerDataPostgres: dbHealth.type === "postgres" ? "connected" : "demo-store-fallback",
+      databaseError: dbHealth.error || null,
       auth0: isAuth0Configured() ? "active" : (demoActive ? "demo-mode-active" : "unconfigured"),
       geminiAi: geminiConfigured ? "configured" : "deterministic-keyword-fallback",
       elevenLabsStt: elevenLabsConfigured ? "configured" : "demo-transcript-fallback",

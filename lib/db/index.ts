@@ -18,8 +18,13 @@ export type User = schema.User;
 export type Message = schema.Message;
 
 
-const connectionString = process.env.DATABASE_URL || "postgresql://postgres:postgres@localhost:5432/vulture";
+const rawDbUrl = process.env.DATABASE_URL?.trim().replace(/^['"]|['"]$/g, "");
+const connectionString = rawDbUrl || "postgresql://postgres:postgres@localhost:5432/vulture";
 const isDemoMode = process.env.DEMO_MODE === "true";
+
+if (!rawDbUrl) {
+  console.warn("[Database] DATABASE_URL is not set in environment! Add DATABASE_URL to your Vercel Project Settings > Environment Variables.");
+}
 
 const isCloudDb =
   connectionString.includes("timescale.com") ||
