@@ -19,7 +19,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
     name: "Ratnadwip Sarkar",
     role: "Lead Engineer / Fullstack & AI",
     handle: "@realratnadwip",
-    bio: "Architected the voice pipeline and Gemini triage engine. Strongly believes typing during an incident is a design failure.",
+    bio: "Architected the voice pipeline and Gemini triage engine.",
     image: "/members/img/member1.jpg",
     links: {
       github: "https://github.com/RealRatnadwip",
@@ -30,11 +30,11 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     id: "member2",
-    name: "Himanshu",
-    role: "Frontend Architect & Interactions",
-    handle: "@himanshu",
-    bio: "Obsessed with 120fps micro-interactions, dark brutalist aesthetics, and audio waveform responsiveness.",
-    image: "",
+    name: "Ankita Aich",
+    role: "Frontend Developer",
+    handle: "@ankitaaichhh29",
+    bio: "",
+    image: "/members/img/member2.png",
     links: {
       github: "https://github.com",
       linkedin: "https://linkedin.com",
@@ -45,7 +45,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: "member3",
     name: "Koushik",
-    role: "Systems Specialist & Backend",
+    role: "Frontend Architech",
     handle: "@koushik",
     bio: "Maintains real-time database queries, presence heartbeats, and time-decay relevance calculation algorithms.",
     image: "",
@@ -59,7 +59,7 @@ export const TEAM_MEMBERS: TeamMember[] = [
   {
     id: "member4",
     name: "Ranit",
-    role: "Product & Visual Design",
+    role: "QA Tester",
     handle: "@ranit",
     bio: "Designed Vulture's technical monospace identity, urgency visual hierarchy, and high-contrast editorial look.",
     image: "",
@@ -72,9 +72,9 @@ export const TEAM_MEMBERS: TeamMember[] = [
   },
   {
     id: "member5",
-    name: "Agniswar Paul",
-    role: "DevOps & Cloud Infrastructure",
-    handle: "@agniswar",
+    name: "LLM",
+    role: "LLM Developer",
+    handle: "@llm",
     bio: "Oversees containerized deployments, cloud database high availability, and network routing resilience.",
     image: "",
     links: {
