@@ -17,6 +17,7 @@ import {
   Cpu,
   RefreshCw,
   Terminal,
+  ArrowRight,
 } from "lucide-react";
 import { PriorityLevel } from "@/lib/validation";
 import { triggerPriorityVibration } from "@/lib/utils/hapticsAndAlerts";
@@ -75,6 +76,7 @@ export function VoiceHeroDemo() {
   const [recordingSeconds, setRecordingSeconds] = useState(0);
   const [result, setResult] = useState<DemoResult | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [customText, setCustomText] = useState("");
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -223,6 +225,14 @@ export function VoiceHeroDemo() {
     if (state === "RECORDING" || state === "TRANSCRIBING" || state === "CLASSIFYING") return;
     setResult(null);
     runPipeline({ text });
+  };
+
+  const handleCustomSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = customText.trim();
+    if (!trimmed || isBusy) return;
+    setResult(null);
+    runPipeline({ text: trimmed });
   };
 
   const isBusy = state === "RECORDING" || state === "TRANSCRIBING" || state === "CLASSIFYING";
@@ -389,8 +399,28 @@ export function VoiceHeroDemo() {
             </div>
           </div>
 
+          {/* Custom Text Field Input alongside Mic */}
+          <form onSubmit={handleCustomSubmit} className="mt-3 pt-3 border-t border-[#161822] flex items-center gap-2">
+            <input
+              type="text"
+              value={customText}
+              onChange={(e) => setCustomText(e.target.value)}
+              disabled={isBusy}
+              placeholder="Or type a custom scenario: e.g. Payment gateway down, failover to Stripe..."
+              className="flex-1 px-3 py-1.5 rounded-lg bg-[#0c0d13] border border-[#1c202d] text-xs font-mono text-[#f8f8f6] placeholder-[#64748b] focus:outline-none focus:border-[#d4f65b]/50 transition-all"
+            />
+            <button
+              type="submit"
+              disabled={isBusy || !customText.trim()}
+              className="px-3.5 py-1.5 rounded-lg bg-[#d4f65b] text-[#08090b] font-mono font-bold text-xs hover:bg-[#c3e848] transition-all disabled:opacity-40 disabled:cursor-not-allowed shrink-0 flex items-center gap-1.5 shadow-[0_0_15px_rgba(212,246,91,0.2)] cursor-pointer"
+            >
+              <span>TRIAGE</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </form>
+
           {/* Quick preset scenario buttons with Bright Pastel Accents */}
-          <div className="mt-3 pt-3 border-t border-[#161822] flex flex-wrap items-center gap-1.5">
+          <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
             <span className="text-[10px] font-mono text-[#64748b] uppercase mr-1">
               Sample Scenarios:
             </span>
