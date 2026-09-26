@@ -4,13 +4,13 @@
 
 :root {
   --background: #08090b;
-  --surface: #0f1015;
-  --surface-card: #14151d;
-  --surface-hover: #191b24;
-  --surface-elevated: #1f222f;
-  --border: #232634;
-  --border-subtle: #181a24;
-  --border-bright: #2f3446;
+  --surface: #0c0d12;
+  --surface-card: #0f1117;
+  --surface-hover: #161822;
+  --surface-elevated: #1a1d29;
+  --border: #1e2232;
+  --border-subtle: #141722;
+  --border-bright: #2a3045;
   --primary-text: #f8f8f6;
   --secondary-text: #94a3b8;
   --accent: #d4f65b;
@@ -32,15 +32,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
-  background-image: 
-    radial-gradient(ellipse 90% 70% at 50% -25%, rgba(212, 246, 91, 0.04), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(221, 214, 254, 0.03), transparent 50%),
-    radial-gradient(ellipse 60% 50% at 15% 30%, rgba(125, 211, 252, 0.02), transparent 50%);
+}
+
+/* Tactile Architectural Card Plate */
+.card-plate {
+  background-color: #0c0d12;
+  border: 1px solid #1e2230;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
 /* Fine Tactical Dot Matrix Grid Pattern */
 .bg-tactical-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

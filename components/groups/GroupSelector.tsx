@@ -61,7 +61,7 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
   return (
     <div className="w-full max-w-3xl mx-auto py-8 px-4">
       {/* Header and Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#212433]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#181a24]">
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className="w-2 h-2 rounded-full bg-[#d4f65b] animate-ping" />
@@ -78,7 +78,7 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
           <button
             type="button"
             onClick={() => setIsJoinOpen(true)}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-mono bg-[#13151f] hover:bg-[#1a1c2a] text-[#cbd5e1] border border-[#272b3c] transition-all hover:border-[#3e445d]"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-mono bg-[#10121a] hover:bg-[#151822] text-[#cbd5e1] border border-[#1e2230] transition-all hover:border-[#2f354a]"
           >
             <LogIn className="w-3.5 h-3.5 text-[#ddd6fe]" />
             <span>JOIN CODE</span>
@@ -104,11 +104,11 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
             <Link
               key={group.id}
               href={`/groups/${group.id}`}
-              className="group block p-4 sm:p-5 rounded-2xl bg-[#0e1017]/90 hover:bg-[#131622] border border-[#222534] hover:border-[#383e54] transition-all shadow-lg hover:shadow-xl relative overflow-hidden"
+              className="group block p-4 sm:p-5 rounded-2xl bg-[#0c0d12] hover:bg-[#10121a] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] transition-all relative overflow-hidden"
             >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-[#141724] border border-[#262b3d] flex items-center justify-center text-[#d4f65b] group-hover:border-[#d4f65b]/50 group-hover:scale-105 transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] group-hover:border-[#d4f65b]/50 group-hover:scale-105 transition-all">
                     <Radio className="w-4 h-4" />
                   </div>
 
@@ -138,11 +138,11 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
                 </div>
 
                 {/* Right Area: Invite Code & Arrow */}
-                <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#1a1c28]">
+                <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#181a24]">
                   <button
                     type="button"
                     onClick={(e) => copyCode(e, group.inviteCode)}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#141622] hover:bg-[#1a1d2d] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#242839] transition-colors"
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#10121a] hover:bg-[#151822] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#1e2230] transition-colors"
                     title="Click to copy invite code"
                   >
                     <span>CODE: {group.inviteCode}</span>
@@ -153,7 +153,7 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
                     )}
                   </button>
 
-                  <div className="w-8 h-8 rounded-lg bg-[#131622] border border-[#232738] flex items-center justify-center text-[#94a3b8] group-hover:text-[#d4f65b] group-hover:border-[#d4f65b]/50 transition-all">
+                  <div className="w-8 h-8 rounded-lg bg-[#10121a] border border-[#1e2230] flex items-center justify-center text-[#94a3b8] group-hover:text-[#d4f65b] group-hover:border-[#d4f65b]/50 transition-all">
                     <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </div>
                 </div>
@@ -163,7 +163,7 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
         })}
 
         {groups.length === 0 && (
-          <div className="p-12 text-center border border-dashed border-[#222534] rounded-2xl">
+          <div className="p-12 text-center border border-dashed border-[#1e2230] rounded-2xl">
             <Radio className="w-8 h-8 text-[#64748b] mx-auto mb-2" />
             <p className="font-mono text-sm text-[#94a3b8]">No broadcast channels joined yet.</p>
             <p className="font-mono text-xs text-[#64748b] mt-1">

@@ -23,10 +23,10 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#08090b] text-[#f8f8f6] flex flex-col justify-between selection:bg-[#d4f65b] selection:text-[#08090b]">
       {/* Top Floating Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#08090b]/80 border-b border-[#212431]/80 px-4 sm:px-6 h-15 flex items-center justify-between max-w-6xl w-full mx-auto">
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#08090b]/90 border-b border-[#181a24] px-4 sm:px-6 h-15 flex items-center justify-between max-w-6xl w-full mx-auto">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-xl bg-[#12131b] border border-[#272b3c] flex items-center justify-center group-hover:border-[#d4f65b]/70 transition-all shadow-sm">
+            <div className="w-8 h-8 rounded-xl bg-[#10121a] border border-[#1e2230] flex items-center justify-center group-hover:border-[#d4f65b]/70 transition-all shadow-sm">
               <Radio className="w-4 h-4 text-[#d4f65b]" />
             </div>
             <span className="font-mono text-xs font-extrabold tracking-widest uppercase text-[#f8f8f6]">
@@ -34,7 +34,7 @@ export default function LandingPage() {
             </span>
           </Link>
 
-          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#12141c] px-2.5 py-0.5 rounded-full border border-[#222533] hidden sm:inline-block">
+          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#10121a] px-2.5 py-0.5 rounded-full border border-[#1a1d28] hidden sm:inline-block">
             v0.1 // voice-first intelligence
           </span>
         </div>
@@ -77,7 +77,7 @@ export default function LandingPage() {
       {/* Hero Section */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-12 sm:py-20 flex flex-col items-center text-center">
         {/* Eyebrow Badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#12141d] border border-[#24283b] text-xs font-mono text-[#94a3b8] mb-8 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0c0d12] border border-[#1e2230] text-xs font-mono text-[#94a3b8] mb-8 shadow-sm">
           <span className="w-2 h-2 rounded-full bg-[#d4f65b] animate-ping" />
           <span className="text-[#f8f8f6] font-medium">VOICE-FIRST PROTOCOL</span>
           <span className="text-[#3b4054]">·</span>
@@ -109,7 +109,7 @@ export default function LandingPage() {
 
           <a
             href="#team"
-            className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase bg-[#12141e] text-[#cbd5e1] hover:text-[#f8f8f6] hover:bg-[#181a27] border border-[#272b3c] transition-all flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase bg-[#10121a] text-[#cbd5e1] hover:text-[#f8f8f6] hover:bg-[#151822] border border-[#1e2230] transition-all flex items-center justify-center gap-2"
           >
             <Users className="w-4 h-4 text-[#ddd6fe]" />
             <span>MEET THE CREW</span>
@@ -124,7 +124,7 @@ export default function LandingPage() {
         {/* ------------------------------------------------------------- */}
         {/* Core Principles Architecture Grid */}
         {/* ------------------------------------------------------------- */}
-        <section id="concepts" className="mt-28 w-full text-left pt-14 border-t border-[#1d202d]">
+        <section id="concepts" className="mt-28 w-full text-left pt-14 border-t border-[#181a24]">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-3">
             <div>
               <div className="flex items-center gap-2 text-xs font-mono text-[#d4f65b] uppercase tracking-wider mb-1.5">
@@ -142,12 +142,13 @@ export default function LandingPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Concept 1 */}
-            <div className="p-6 sm:p-7 rounded-2xl bg-[#0f1118] border border-[#222534] hover:border-[#2f3448] transition-all relative overflow-hidden group">
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
               <div className="flex items-center justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[#161823] border border-[#2c3044] flex items-center justify-center text-[#d4f65b] shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] shadow-sm">
                   <Mic className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#64748b] bg-[#12141c] px-2.5 py-1 rounded-full border border-[#212433]">
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
                   01 // VOICE
                 </span>
               </div>
@@ -162,12 +163,13 @@ export default function LandingPage() {
             </div>
 
             {/* Concept 2 */}
-            <div className="p-6 sm:p-7 rounded-2xl bg-[#0f1118] border border-[#222534] hover:border-[#2f3448] transition-all relative overflow-hidden group">
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
               <div className="flex items-center justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[#161823] border border-[#2c3044] flex items-center justify-center text-[#ddd6fe] shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#ddd6fe] shadow-sm">
                   <Sparkles className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#64748b] bg-[#12141c] px-2.5 py-1 rounded-full border border-[#212433]">
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
                   02 // AI TRIAGE
                 </span>
               </div>
@@ -182,12 +184,13 @@ export default function LandingPage() {
             </div>
 
             {/* Concept 3 */}
-            <div className="p-6 sm:p-7 rounded-2xl bg-[#0f1118] border border-[#222534] hover:border-[#2f3448] transition-all relative overflow-hidden group">
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
               <div className="flex items-center justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[#161823] border border-[#2c3044] flex items-center justify-center text-[#fdba74] shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#fdba74] shadow-sm">
                   <Clock className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#64748b] bg-[#12141c] px-2.5 py-1 rounded-full border border-[#212433]">
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
                   03 // HALF-LIFE
                 </span>
               </div>
@@ -202,12 +205,13 @@ export default function LandingPage() {
             </div>
 
             {/* Concept 4 */}
-            <div className="p-6 sm:p-7 rounded-2xl bg-[#0f1118] border border-[#222534] hover:border-[#2f3448] transition-all relative overflow-hidden group">
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
               <div className="flex items-center justify-between mb-5">
-                <div className="w-10 h-10 rounded-xl bg-[#161823] border border-[#2c3044] flex items-center justify-center text-[#7dd3fc] shadow-sm">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#7dd3fc] shadow-sm">
                   <Zap className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#64748b] bg-[#12141c] px-2.5 py-1 rounded-full border border-[#212433]">
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
                   04 // HAPTICS
                 </span>
               </div>
@@ -259,8 +263,13 @@ export default function LandingPage() {
         </section>
 
         {/* Bottom Banner */}
-        <div className="mt-28 w-full p-8 sm:p-12 rounded-2xl bg-gradient-to-br from-[#12141e] via-[#0d0f15] to-[#090a0d] border border-[#24283b] flex flex-col items-center text-center relative overflow-hidden shadow-2xl">
-          <div className="w-12 h-12 rounded-2xl bg-[#171a27] border border-[#2f354c] flex items-center justify-center text-[#d4f65b] mb-4 shadow-lg shadow-[#d4f65b]/10">
+        <div className="mt-28 w-full p-8 sm:p-14 rounded-2xl bg-[#0c0d12] border border-[#1e2230] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_16px_48px_rgba(0,0,0,0.6)] flex flex-col items-center text-center relative overflow-hidden">
+          <span className="absolute top-3 left-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+
+          <div className="w-12 h-12 rounded-2xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] mb-4 shadow-sm">
             <Radio className="w-6 h-6" />
           </div>
           <h3 className="font-mono text-xl sm:text-3xl font-extrabold uppercase text-[#f8f8f6] tracking-tight">
@@ -271,7 +280,7 @@ export default function LandingPage() {
           </p>
           <Link
             href="/dashboard"
-            className="mt-6 px-7 py-3 rounded-xl text-xs font-mono font-bold uppercase tracking-wider bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all shadow-[0_0_30px_rgba(212,246,91,0.25)] flex items-center gap-2"
+            className="mt-6 px-7 py-3.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all shadow-[0_0_25px_rgba(212,246,91,0.22)] flex items-center gap-2"
           >
             <span>LAUNCH SQUAD TERMINAL</span>
             <ArrowRight className="w-4 h-4" />

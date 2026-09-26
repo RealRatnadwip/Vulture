@@ -13,12 +13,15 @@ export function DecaySimulator() {
   ];
 
   return (
-    <div className="w-full rounded-2xl bg-[#0e1017]/90 border border-[#232738] p-5 sm:p-7 relative overflow-hidden shadow-2xl backdrop-blur-xl">
-      {/* Ambient Pastel Glow */}
-      <div className="absolute top-0 left-1/3 w-64 h-32 bg-[#fdba74]/5 blur-3xl pointer-events-none rounded-full" />
+    <div className="w-full rounded-2xl bg-[#0c0d12] border border-[#1e2230] p-5 sm:p-7 relative overflow-hidden text-left shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_12px_40px_rgba(0,0,0,0.6)]">
+      {/* Precision Corner Reticles */}
+      <span className="absolute top-2.5 left-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 left-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
 
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#1f2233] gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#1a1d28] gap-3">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-[#d4f65b] animate-pulse" />
@@ -32,7 +35,7 @@ export function DecaySimulator() {
         </div>
 
         {/* Timeline Stage Switcher */}
-        <div className="flex items-center gap-1.5 bg-[#12141e] p-1 rounded-xl border border-[#24283b]">
+        <div className="flex items-center gap-1.5 bg-[#090a0f] p-1 rounded-xl border border-[#1c202d]">
           {stages.map((stage, idx) => (
             <button
               key={stage.label}
@@ -41,7 +44,7 @@ export function DecaySimulator() {
               className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all flex items-center gap-1.5 ${
                 decayStage === idx
                   ? "bg-[#d4f65b] text-[#08090b] font-bold shadow-md shadow-[#d4f65b]/20"
-                  : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#1a1d2c]"
+                  : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#12141c]"
               }`}
             >
               <span>{stage.label}</span>
@@ -58,10 +61,10 @@ export function DecaySimulator() {
         <div
           className={`p-5 rounded-xl border transition-all duration-500 relative ${
             decayStage === 0
-              ? "bg-[#141622] border-[#fda4af] border-l-4 shadow-[0_0_25px_rgba(253,164,175,0.15)]"
+              ? "bg-[#0f1118] border-[#1e2230] border-l-4 border-l-[#fda4af] shadow-[0_0_25px_rgba(253,164,175,0.12)]"
               : decayStage === 1
-              ? "bg-[#10121a] border-[#fdba74]/60 border-l-4 opacity-80"
-              : "bg-[#0a0b10] border-[#222533] border-l-2 opacity-40 filter grayscale"
+              ? "bg-[#0a0b10] border-[#1a1d28] border-l-4 border-l-[#fdba74]/70 opacity-80"
+              : "bg-[#08090d] border-[#161822] border-l-2 border-l-[#64748b]/40 opacity-40 filter grayscale"
           }`}
         >
           {/* Card Top */}

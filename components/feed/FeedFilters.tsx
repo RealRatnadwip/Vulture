@@ -21,16 +21,16 @@ export function FeedFilters({
   counts,
 }: FeedFiltersProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 py-3 border-b border-[#212433]">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 py-3 border-b border-[#181a24]">
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1.5 bg-[#10121a] p-1 rounded-xl border border-[#222638]">
+      <div className="flex items-center gap-1.5 bg-[#090a0f] p-1 rounded-xl border border-[#1e2230]">
         <button
           type="button"
           onClick={() => onFilterChange("ALL")}
           className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all ${
             currentFilter === "ALL"
-              ? "bg-[#181b27] text-[#d4f65b] font-bold border border-[#2d3348] shadow-sm"
-              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#141723]"
+              ? "bg-[#11131b] text-[#d4f65b] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
           ALL ({counts.all})
@@ -41,8 +41,8 @@ export function FeedFilters({
           onClick={() => onFilterChange("IMPORTANT")}
           className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all flex items-center gap-1.5 ${
             currentFilter === "IMPORTANT"
-              ? "bg-[#181b27] text-[#fda4af] font-bold border border-[#3e2730] shadow-sm"
-              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#141723]"
+              ? "bg-[#11131b] text-[#fda4af] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
           <span className="w-1.5 h-1.5 rounded-full bg-[#fda4af]" />
@@ -54,8 +54,8 @@ export function FeedFilters({
           onClick={() => onFilterChange("RECENT")}
           className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all ${
             currentFilter === "RECENT"
-              ? "bg-[#181b27] text-[#7dd3fc] font-bold border border-[#233544] shadow-sm"
-              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#141723]"
+              ? "bg-[#11131b] text-[#7dd3fc] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
           RECENT
@@ -70,7 +70,7 @@ export function FeedFilters({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search transcripts or tags..."
-          className="w-full pl-9 pr-8 py-1.5 text-xs font-mono bg-[#10121a] border border-[#222638] rounded-xl text-[#f8f8f6] placeholder-[#64748b] focus:outline-none focus:border-[#d4f65b]/50 focus:ring-1 focus:ring-[#d4f65b]/30 transition-all"
+          className="w-full pl-9 pr-8 py-1.5 text-xs font-mono bg-[#090a0f] border border-[#1e2230] rounded-xl text-[#f8f8f6] placeholder-[#64748b] focus:outline-none focus:border-[#d4f65b]/50 focus:ring-1 focus:ring-[#d4f65b]/30 transition-all"
         />
         {searchQuery && (
           <button

@@ -33,7 +33,7 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
   return (
     <div className="flex flex-col min-h-[calc(100vh-3.75rem)] max-w-4xl mx-auto w-full px-4 sm:px-6 pb-40 pt-5">
       {/* Group Header */}
-      <div className="pb-5 mb-4 border-b border-[#212433]">
+      <div className="pb-5 mb-4 border-b border-[#181a24]">
         <div className="flex items-center justify-between mb-3">
           <Link
             href="/dashboard"
@@ -45,7 +45,7 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
 
           <button
             onClick={copyInviteCode}
-            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#12141f] hover:bg-[#181b29] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#23273a] transition-all"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#10121a] hover:bg-[#151822] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#1e2230] transition-all"
             title="Copy group invite code"
           >
             <span className="text-[#64748b]">CODE:</span>
@@ -56,7 +56,7 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
 
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-[#141724] border border-[#272c3f] flex items-center justify-center text-[#d4f65b] shadow-sm">
+            <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] shadow-sm">
               <Radio className="w-4 h-4" />
             </div>
             <div>
@@ -82,7 +82,7 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
       </main>
 
       {/* Floating Tactical Push-To-Talk Dock */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#090b10]/90 backdrop-blur-2xl border-t border-[#202538] py-4 px-4 shadow-[0_-15px_35px_rgba(0,0,0,0.6)]">
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#08090b]/95 backdrop-blur-2xl border-t border-[#181a24] py-4 px-4 shadow-[0_-15px_35px_rgba(0,0,0,0.6)]">
         <div className="max-w-4xl mx-auto flex flex-col items-center">
           <MicrophoneButton
             groupId={group.id}

@@ -21,15 +21,15 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
   const isExpired = relevance.state === "EXPIRED";
 
   // Card border styling with bright pastel edges
-  let borderClass = "border-l-4 border-l-[#2a2e3f] border-[#222534]";
+  let borderClass = "border-l-4 border-l-[#2a2e3f] border-[#1e2230]";
   if (isCritical) {
-    borderClass = "border-l-4 border-l-[#fda4af] border-[#382329] shadow-[0_0_20px_rgba(253,164,175,0.12)]";
+    borderClass = "border-l-4 border-l-[#fda4af] border-[#1e2230] shadow-[0_0_20px_rgba(253,164,175,0.08)]";
   } else if (isHigh) {
-    borderClass = "border-l-4 border-l-[#fdba74] border-[#382b22]";
+    borderClass = "border-l-4 border-l-[#fdba74] border-[#1e2230]";
   } else if (isLow) {
-    borderClass = "border-l-4 border-l-[#7dd3fc] border-[#1e2a35]";
+    borderClass = "border-l-4 border-l-[#7dd3fc] border-[#1e2230]";
   } else {
-    borderClass = "border-l-4 border-l-[#d4f65b] border-[#263124]";
+    borderClass = "border-l-4 border-l-[#d4f65b] border-[#1e2230]";
   }
 
   const togglePlay = () => {
@@ -39,7 +39,7 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
 
   return (
     <article
-      className={`relative p-5 rounded-2xl bg-[#0e1017]/95 border transition-all ${borderClass} ${
+      className={`relative p-5 rounded-2xl bg-[#0c0d12] border transition-all shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] ${borderClass} ${
         isExpired ? "opacity-45 hover:opacity-75" : ""
       } ${isNew ? "ring-2 ring-[#d4f65b]/40 animate-in fade-in slide-in-from-top-2" : ""}`}
     >
@@ -86,7 +86,7 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
         </div>
 
         {/* Time-Decay relative clock */}
-        <div className="flex items-center gap-1.5 text-xs font-mono text-[#94a3b8] px-2.5 py-0.5 rounded-full bg-[#12141e] border border-[#222638]">
+        <div className="flex items-center gap-1.5 text-xs font-mono text-[#94a3b8] px-2.5 py-0.5 rounded-full bg-[#10121a] border border-[#1e2230]">
           <Clock className="w-3 h-3 text-[#d4f65b]" />
           <span
             className={
@@ -106,7 +106,7 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
       {/* Sender line & Timestamp */}
       <div className="flex items-center justify-between mb-3 text-xs">
         <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-[#161824] border border-[#2c3144] flex items-center justify-center font-mono text-[10px] font-bold text-[#d4f65b]">
+          <div className="w-5 h-5 rounded-full bg-[#11131b] border border-[#1e2230] flex items-center justify-center font-mono text-[10px] font-bold text-[#d4f65b]">
             {message.sender.name.charAt(0).toUpperCase()}
           </div>
           <span className={`font-mono font-bold ${isExpired ? "text-[#94a3b8]" : "text-[#f8f8f6]"}`}>
@@ -140,7 +140,7 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
 
       {/* AI Summary Card (Gemini Extraction) */}
       {message.summary && (
-        <div className="p-3 rounded-xl bg-[#11131c] border border-[#202538] flex items-start gap-2.5">
+        <div className="p-3 rounded-xl bg-[#090a0f] border border-[#1a1d28] flex items-start gap-2.5">
           <Sparkles className="w-3.5 h-3.5 text-[#ddd6fe] shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <span className="font-mono text-[10px] font-bold text-[#ddd6fe] uppercase tracking-wider block mb-0.5">

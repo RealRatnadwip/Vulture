@@ -228,13 +228,15 @@ export function VoiceHeroDemo() {
   const isBusy = state === "RECORDING" || state === "TRANSCRIBING" || state === "CLASSIFYING";
 
   return (
-    <div className="w-full rounded-2xl bg-[#0e1017]/90 border border-[#232738] p-5 sm:p-7 relative overflow-hidden text-left shadow-2xl backdrop-blur-xl">
-      {/* Subtle Pastel Ambient Glow */}
-      <div className="absolute top-0 right-1/4 w-80 h-36 bg-[#d4f65b]/5 blur-3xl pointer-events-none rounded-full" />
-      <div className="absolute bottom-0 left-1/4 w-80 h-36 bg-[#ddd6fe]/5 blur-3xl pointer-events-none rounded-full" />
+    <div className="w-full rounded-2xl bg-[#0c0d12] border border-[#1e2230] p-5 sm:p-7 relative overflow-hidden text-left shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05),0_12px_40px_rgba(0,0,0,0.6)]">
+      {/* Precision Corner Reticles */}
+      <span className="absolute top-2.5 left-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 left-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+      <span className="absolute bottom-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
 
       {/* Top Status Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1f2233] mb-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1a1d28] mb-5">
         <div className="flex items-center gap-2.5">
           <div className="relative flex items-center justify-center">
             <span
@@ -262,11 +264,11 @@ export function VoiceHeroDemo() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#141622] px-2.5 py-1 rounded-full border border-[#272b3e] flex items-center gap-1.5">
+          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#11131b] px-2.5 py-1 rounded-full border border-[#1e2230] flex items-center gap-1.5">
             <Cpu className="w-3 h-3 text-[#ddd6fe]" />
             <span>ELEVENLABS + GEMINI</span>
           </span>
-          <span className="text-[10px] font-mono text-[#86efac] bg-[#14231b] px-2 py-0.5 rounded-full border border-[#284837] font-semibold">
+          <span className="text-[10px] font-mono text-[#86efac] bg-[#101a14] px-2.5 py-0.5 rounded-full border border-[#1b3524] font-semibold">
             LIVE API
           </span>
         </div>
@@ -290,7 +292,7 @@ export function VoiceHeroDemo() {
               type="button"
               onClick={startRecording}
               disabled={isBusy}
-              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#151824] border-[#2d3246] hover:border-[#d4f65b] text-[#f8f8f6] hover:bg-[#1a1e2d] hover:shadow-[0_0_25px_rgba(212,246,91,0.2)] cursor-pointer disabled:opacity-50"
+              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#10121a] border-[#1e2230] hover:border-[#d4f65b]/80 text-[#f8f8f6] hover:bg-[#141722] hover:shadow-[0_0_25px_rgba(212,246,91,0.2)] cursor-pointer disabled:opacity-50"
             >
               <Mic className="w-4 h-4 text-[#d4f65b]" />
               <span>RECORD YOUR VOICE</span>
@@ -305,7 +307,7 @@ export function VoiceHeroDemo() {
         </div>
 
         {/* Middle/Right: Audio Waveform & Real-Time Pipeline Progress */}
-        <div className="flex-1 bg-[#090b10] p-4 rounded-xl border border-[#1e2233] flex flex-col justify-between min-h-[96px]">
+        <div className="flex-1 bg-[#090a0f] p-4 rounded-xl border border-[#191c28] flex flex-col justify-between min-h-[96px]">
           {/* Animated visual state bar */}
           <div className="flex items-center gap-3">
             {/* Dynamic Multi-Pastel Wave Bars */}
@@ -316,7 +318,7 @@ export function VoiceHeroDemo() {
                     ? "bg-[#d4f65b] wave-bar-1"
                     : isBusy
                     ? "bg-[#d4f65b] wave-bar-3 opacity-70"
-                    : "bg-[#282d40] h-2"
+                    : "bg-[#1c1f2b] h-2"
                 }`}
               />
               <span
@@ -325,7 +327,7 @@ export function VoiceHeroDemo() {
                     ? "bg-[#7dd3fc] wave-bar-2"
                     : isBusy
                     ? "bg-[#7dd3fc] wave-bar-4 opacity-70"
-                    : "bg-[#282d40] h-4"
+                    : "bg-[#1c1f2b] h-4"
                 }`}
               />
               <span
@@ -334,7 +336,7 @@ export function VoiceHeroDemo() {
                     ? "bg-[#ddd6fe] wave-bar-3"
                     : isBusy
                     ? "bg-[#ddd6fe] wave-bar-2 opacity-70"
-                    : "bg-[#282d40] h-3"
+                    : "bg-[#1c1f2b] h-3"
                 }`}
               />
               <span
@@ -343,7 +345,7 @@ export function VoiceHeroDemo() {
                     ? "bg-[#fba4af] wave-bar-4"
                     : isBusy
                     ? "bg-[#fba4af] wave-bar-5 opacity-70"
-                    : "bg-[#282d40] h-5"
+                    : "bg-[#1c1f2b] h-5"
                 }`}
               />
               <span
@@ -352,7 +354,7 @@ export function VoiceHeroDemo() {
                     ? "bg-[#86efac] wave-bar-5"
                     : isBusy
                     ? "bg-[#86efac] wave-bar-1 opacity-70"
-                    : "bg-[#282d40] h-2"
+                    : "bg-[#1c1f2b] h-2"
                 }`}
               />
             </div>
@@ -388,7 +390,7 @@ export function VoiceHeroDemo() {
           </div>
 
           {/* Quick preset scenario buttons with Bright Pastel Accents */}
-          <div className="mt-3 pt-3 border-t border-[#181b2a] flex flex-wrap items-center gap-1.5">
+          <div className="mt-3 pt-3 border-t border-[#161822] flex flex-wrap items-center gap-1.5">
             <span className="text-[10px] font-mono text-[#64748b] uppercase mr-1">
               Sample Scenarios:
             </span>
@@ -398,7 +400,7 @@ export function VoiceHeroDemo() {
                 type="button"
                 onClick={() => handlePresetSelect(preset.text)}
                 disabled={isBusy}
-                className="px-2.5 py-1 rounded-full bg-[#12141e] hover:bg-[#181b29] border border-[#24283b] hover:border-[#3d4461] text-[11px] font-mono text-[#cbd5e1] hover:text-[#f8f8f6] transition-all flex items-center gap-1.5 disabled:opacity-50"
+                className="px-2.5 py-1 rounded-full bg-[#0c0d13] hover:bg-[#12141c] border border-[#1c202d] hover:border-[#2d3348] text-[11px] font-mono text-[#cbd5e1] hover:text-[#f8f8f6] transition-all flex items-center gap-1.5 disabled:opacity-50"
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full"
@@ -421,8 +423,8 @@ export function VoiceHeroDemo() {
 
       {/* Live Result Card (Returned by Real Gemini API) */}
       {result && (
-        <div className="mt-5 p-5 rounded-xl bg-[#0c0d13] border border-[#25293d] shadow-2xl animate-in fade-in slide-in-from-top-3 duration-300">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-[#1b1f30] mb-3.5">
+        <div className="mt-5 p-5 rounded-xl bg-[#090a0f] border border-[#1e2230] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] animate-in fade-in slide-in-from-top-3 duration-300">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-[#161824] mb-3.5">
             <div className="flex items-center gap-2">
               {result.classification.priority === "CRITICAL" ? (
                 <ShieldAlert className="w-4 h-4 text-[#fda4af]" />
@@ -467,7 +469,7 @@ export function VoiceHeroDemo() {
             </div>
 
             <div className="flex items-center gap-3 text-[11px] font-mono text-[#94a3b8]">
-              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#131520] border border-[#24293c]">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#0c0d12] border border-[#1c202d]">
                 <Clock className="w-3 h-3 text-[#d4f65b]" />
                 HALF-LIFE: {result.classification.expiresInMinutes}m
               </span>
@@ -477,7 +479,7 @@ export function VoiceHeroDemo() {
 
           {/* AI Summary and Spoken Words */}
           <div className="space-y-2.5">
-            <div className="p-3 rounded-lg bg-[#11131c] border border-[#202538]">
+            <div className="p-3 rounded-lg bg-[#0c0d12] border border-[#1a1d28]">
               <span className="font-mono text-[10px] text-[#ddd6fe] uppercase font-bold tracking-wider block mb-1">
                 Gemini 3.5 Triage Summary:
               </span>

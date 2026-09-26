@@ -12,16 +12,16 @@ const config: Config = {
       colors: {
         background: "#08090B",
         surface: {
-          DEFAULT: "#0F1015",
-          card: "#14151D",
-          hover: "#191B24",
-          elevated: "#1F222F",
-          subtle: "#0B0C10",
+          DEFAULT: "#0C0D12",
+          card: "#0F1117",
+          hover: "#151822",
+          elevated: "#191C28",
+          subtle: "#08090B",
         },
         border: {
-          DEFAULT: "#232634",
-          subtle: "#181A24",
-          bright: "#2F3446",
+          DEFAULT: "#1E2232",
+          subtle: "#141722",
+          bright: "#2A3045",
           accent: "rgba(212, 246, 91, 0.4)",
         },
         primary: {
