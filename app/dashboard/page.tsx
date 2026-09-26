@@ -18,7 +18,7 @@ export default async function DashboardPage() {
   const groups = await listUserGroups(user.id);
 
   return (
-    <div className="min-h-screen bg-[#0e0e0e] text-[#f1f1ef] flex flex-col">
+    <div className="min-h-screen bg-[#08090b] text-[#f8f8f6] flex flex-col">
       {user.isDemo && <DemoBanner currentUserId={user.id} />}
       <Navbar userName={user.name} avatarUrl={user.avatarUrl || undefined} isDemo={user.isDemo} />
 

@@ -3,7 +3,7 @@
   "appName": "Vulture",
   "webDir": "public",
   "server": {
-    "url": "https://vulture-taupe.vercel.app",
+    "url": "https://vulture.745482.xyz",
     "cleartext": true,
     "androidScheme": "https"
   },
@@ -20,7 +20,7 @@
       "backgroundColor": "#0E0E0E"
     },
     "LocalNotifications": {
-      "smallIcon": "ic_stat_vulture",
+      "smallIcon": "ic_launcher",
       "iconColor": "#D7F24A"
     },
     "PushNotifications": {

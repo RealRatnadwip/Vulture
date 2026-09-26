@@ -5,6 +5,7 @@ import { MessageWithSender } from "@/lib/db";
 import { MessageCard } from "./MessageCard";
 import { FeedFilters, FilterType } from "./FeedFilters";
 import { FullScreenAlert } from "@/components/mobile/FullScreenAlert";
+import { PriorityLevel } from "@/lib/validation";
 import { Radio } from "lucide-react";
 
 interface BroadcastFeedProps {
@@ -20,6 +21,7 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
   const [loadingInitial, setLoadingInitial] = useState(initialMessages.length === 0);
   const [fullScreenAlert, setFullScreenAlert] = useState<MessageWithSender | null>(null);
 
+  const hasLoadedInitialRef = useRef(initialMessages.length > 0);
   const latestTimestampRef = useRef<string | null>(
     initialMessages.length > 0 ? new Date(initialMessages[0].createdAt).toISOString() : null
   );
@@ -35,7 +37,13 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
           : `/api/messages?groupId=${groupId}`;
 
         const res = await fetch(url);
-        if (!res.ok) return;
+        if (!res.ok) {
+          if (res.status === 401) {
+            isMounted = false;
+            clearInterval(interval);
+          }
+          return;
+        }
 
         const data = await res.json();
         const incoming: MessageWithSender[] = data.messages || [];
@@ -49,11 +57,41 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
             // Highlight the newest message
             setNewestId(fresh[0].id);
 
+            // FLASH SCREEN & VIBRATE PHONE based on message priority (when page is opened)
+            if (hasLoadedInitialRef.current) {
+              const priorityWeights: Record<string, number> = {
+                CRITICAL: 4,
+                HIGH: 3,
+                NORMAL: 2,
+                LOW: 1,
+              };
+
+              const topMsg = [...fresh].sort(
+                (a, b) => (priorityWeights[b.priority] || 1) - (priorityWeights[a.priority] || 1)
+              )[0];
+
+              if (typeof window !== "undefined") {
+                window.dispatchEvent(
+                  new CustomEvent("vulture:flash", {
+                    detail: {
+                      id: topMsg.id,
+                      priority: topMsg.priority as PriorityLevel,
+                      senderName: topMsg.sender?.name,
+                      transcript: topMsg.transcript,
+                      summary: topMsg.summary || undefined,
+                      urgencyScore: topMsg.urgencyScore || undefined,
+                      category: topMsg.category || undefined,
+                    },
+                  })
+                );
+              }
+            }
+
             // Trigger full-screen mobile takeover alert for CRITICAL / high-urgency broadcasts
             const critical = fresh.find(
               (m) => m.priority === "CRITICAL" || (m.urgencyScore && m.urgencyScore >= 80)
             );
-            if (critical) {
+            if (critical && hasLoadedInitialRef.current) {
               setFullScreenAlert(critical);
             }
 
@@ -62,9 +100,14 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
             return merged;
           });
 
+          // Mark initial history as loaded
+          hasLoadedInitialRef.current = true;
+
           // Update latest timestamp pointer
           const newest = incoming[0];
           latestTimestampRef.current = new Date(newest.createdAt).toISOString();
+        } else if (isMounted) {
+          hasLoadedInitialRef.current = true;
         }
       } catch (err) {
         console.warn("[BroadcastFeed] Poll error:", err);
@@ -94,6 +137,23 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
       return [newMsg, ...prev];
     });
     latestTimestampRef.current = new Date(newMsg.createdAt).toISOString();
+
+    // Trigger screen flash & vibration feedback for local broadcast
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(
+        new CustomEvent("vulture:flash", {
+          detail: {
+            id: newMsg.id,
+            priority: (newMsg.priority as PriorityLevel) || "NORMAL",
+            senderName: newMsg.sender?.name || "YOU",
+            transcript: newMsg.transcript,
+            summary: newMsg.summary || undefined,
+            urgencyScore: newMsg.urgencyScore || undefined,
+            category: newMsg.category || undefined,
+          },
+        })
+      );
+    }
   };
 
   // Expose local broadcast handler via window event or ref if needed

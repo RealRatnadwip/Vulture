@@ -1,275 +1,310 @@
 import Link from "next/link";
-import { Radio, ArrowRight, Mic, ShieldAlert, Clock, Sparkles, Terminal, Users, Cpu, ArrowUpRight } from "lucide-react";
+import {
+  Radio,
+  ArrowRight,
+  Mic,
+  ShieldAlert,
+  Clock,
+  Sparkles,
+  Terminal,
+  Users,
+  Cpu,
+  ArrowUpRight,
+  Zap,
+  Activity,
+  Layers,
+} from "lucide-react";
 import { TEAM_MEMBERS } from "@/lib/team";
 import { TeamCard } from "@/components/team/TeamCard";
-import { TeamScroller } from "@/components/team/TeamScroller";
 import { DecaySimulator } from "@/components/landing/DecaySimulator";
 import { VoiceHeroDemo } from "@/components/landing/VoiceHeroDemo";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#0e0e0e] text-[#f1f1ef] flex flex-col justify-between selection:bg-[#d7f24a] selection:text-[#0e0e0e]">
-      {/* Top Bar */}
-      <header className="sticky top-0 z-50 backdrop-blur-md bg-[#0e0e0e]/85 border-b border-[#1c1c1c] px-6 h-14 flex items-center justify-between max-w-6xl w-full mx-auto">
+    <div className="min-h-screen bg-[#08090b] text-[#f8f8f6] flex flex-col justify-between selection:bg-[#d4f65b] selection:text-[#08090b]">
+      {/* Top Floating Header */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#08090b]/90 border-b border-[#181a24] px-4 sm:px-6 h-15 flex items-center justify-between max-w-6xl w-full mx-auto">
         <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-lg bg-[#181818] border border-[#2b2b2b] flex items-center justify-center group-hover:border-[#d7f24a] transition-colors">
-              <Radio className="w-3.5 h-3.5 text-[#d7f24a]" />
+          <Link href="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-xl bg-[#10121a] border border-[#1e2230] flex items-center justify-center group-hover:border-[#d4f65b]/70 transition-all shadow-sm">
+              <Radio className="w-4 h-4 text-[#d4f65b]" />
             </div>
-            <span className="font-mono text-xs font-bold tracking-widest uppercase text-[#f1f1ef]">
+            <span className="font-mono text-xs font-extrabold tracking-widest uppercase text-[#f8f8f6]">
               VULTURE
             </span>
           </Link>
 
-          <span className="text-[10px] font-mono text-[#888888] bg-[#161616] px-2 py-0.5 rounded border border-[#222222] hidden sm:inline-block">
-            v0.1 // voice-first
+          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#10121a] px-2.5 py-0.5 rounded-full border border-[#1a1d28] hidden sm:inline-block">
+            v0.1 // voice-first intelligence
           </span>
         </div>
 
-        <nav className="flex items-center gap-4 sm:gap-6">
+        <nav className="flex items-center gap-3 sm:gap-5">
           <a
             href="#concepts"
-            className="text-xs font-mono text-[#888888] hover:text-[#f1f1ef] transition-colors hidden md:inline-block"
+            className="text-xs font-mono text-[#94a3b8] hover:text-[#f8f8f6] transition-colors hidden md:inline-block"
           >
-            // CONCEPTS
+            // ARCHITECTURE
           </a>
           <a
             href="#half-life"
-            className="text-xs font-mono text-[#888888] hover:text-[#f1f1ef] transition-colors hidden md:inline-block"
+            className="text-xs font-mono text-[#94a3b8] hover:text-[#f8f8f6] transition-colors hidden md:inline-block"
           >
             // HALF-LIFE
           </a>
-          <Link
-            href="/team"
-            className="text-xs font-mono text-[#888888] hover:text-[#f1f1ef] transition-colors flex items-center gap-1"
+          <a
+            href="#team"
+            className="text-xs font-mono text-[#ddd6fe] hover:text-[#f8f8f6] transition-colors flex items-center gap-1"
           >
             <span>// CREW</span>
-          </Link>
+          </a>
           <Link
             href="/login"
-            className="text-xs font-mono text-[#888888] hover:text-[#f1f1ef] transition-colors"
+            className="text-xs font-mono text-[#94a3b8] hover:text-[#f8f8f6] transition-colors"
           >
             SIGN IN
           </Link>
           <Link
             href="/dashboard"
-            className="text-xs font-mono font-semibold px-3 py-1.5 rounded bg-[#d7f24a] text-[#0e0e0e] hover:bg-[#c6e33b] transition-all flex items-center gap-1.5 shadow-[0_0_15px_rgba(215,242,74,0.2)]"
+            className="text-xs font-mono font-bold px-3.5 py-1.5 rounded-lg bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all flex items-center gap-1.5 shadow-[0_0_20px_rgba(212,246,91,0.22)]"
           >
-            <span>LIVE DEMO</span>
-            <ArrowRight className="w-3 h-3" />
+            <span>LAUNCH SQUAD</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </nav>
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-6 py-12 sm:py-20 flex flex-col items-center text-center">
-        {/* Eyebrow */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#151515] border border-[#252525] text-[11px] font-mono text-[#999999] mb-6">
-          <span className="w-2 h-2 rounded-full bg-[#d7f24a] animate-pulse" />
-          <span>VOICE-FIRST · TIME-AWARE SQUAD BROADCASTING</span>
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-12 sm:py-20 flex flex-col items-center text-center">
+        {/* Eyebrow Badge */}
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0c0d12] border border-[#1e2230] text-xs font-mono text-[#94a3b8] mb-8 shadow-sm">
+          <span className="w-2 h-2 rounded-full bg-[#d4f65b] animate-ping" />
+          <span className="text-[#f8f8f6] font-medium">VOICE-FIRST PROTOCOL</span>
+          <span className="text-[#3b4054]">·</span>
+          <span className="text-[#86efac]">TIME-AWARE RELEVANCE</span>
         </div>
 
-        {/* Title */}
-        <h1 className="text-4xl sm:text-7xl font-mono font-extrabold tracking-tight text-[#f1f1ef] uppercase">
-          VULTURE
+        {/* Hero Title */}
+        <h1 className="text-4xl sm:text-7xl lg:text-8xl font-mono font-black tracking-tight text-[#f8f8f6] uppercase max-w-5xl leading-none">
+          INFORMATION HAS A HALF-LIFE.
         </h1>
 
-        {/* Tagline */}
-        <p className="mt-3 text-lg sm:text-2xl font-light text-[#a8a8a4] tracking-tight italic font-mono">
-          &ldquo;information has a half-life.&rdquo;
+        {/* Human Narrative */}
+        <p className="mt-6 text-base sm:text-lg text-[#94a3b8] max-w-2xl mx-auto leading-relaxed font-sans">
+          Why does modern team software treat an active production server crash the exact same as lunch banter from 3 hours ago? 
+          <span className="text-[#f8f8f6] font-medium block mt-2">
+            Speak once. VULTURE extracts the signal, ranks urgency with Gemini, and lets stale noise decay silently.
+          </span>
         </p>
 
-        {/* Human copy */}
-        <p className="mt-6 text-sm sm:text-base text-[#888888] max-w-2xl mx-auto leading-relaxed font-sans">
-          Why does every chat app treat a 2-second server crash the exact same as a meme sent 4 hours ago? 
-          Speak once. VULTURE extracts the signal, ranks urgency, and lets stale noise decay silently.
-        </p>
-
-        {/* CTAs */}
-        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+        {/* High-Polish CTAs */}
+        <div className="mt-8 flex flex-col sm:flex-row items-center gap-3.5 w-full sm:w-auto">
           <Link
             href="/dashboard"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-lg text-xs font-mono font-bold tracking-wider uppercase bg-[#d7f24a] text-[#0e0e0e] hover:bg-[#c6e33b] transition-all shadow-[0_0_25px_rgba(215,242,74,0.18)] flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-xs font-mono font-bold tracking-wider uppercase bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all shadow-[0_0_30px_rgba(212,246,91,0.25)] flex items-center justify-center gap-2"
           >
-            <span>OPEN SQUAD FEED</span>
+            <span>ENTER SQUAD TERMINAL</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
 
-          <Link
-            href="/team"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-lg text-xs font-mono font-medium tracking-wider uppercase bg-[#161616] text-[#cccccc] hover:text-[#f1f1ef] hover:bg-[#1d1d1d] border border-[#282828] transition-all flex items-center justify-center gap-2"
+          <a
+            href="#team"
+            className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase bg-[#10121a] text-[#cbd5e1] hover:text-[#f8f8f6] hover:bg-[#151822] border border-[#1e2230] transition-all flex items-center justify-center gap-2"
           >
-            <Users className="w-4 h-4 text-[#888888]" />
+            <Users className="w-4 h-4 text-[#ddd6fe]" />
             <span>MEET THE CREW</span>
-          </Link>
+          </a>
         </div>
 
-        {/* Interactive Voice Pipeline Trigger Preview */}
-        <div className="mt-12 w-full max-w-2xl">
+        {/* Live Interactive Voice Pipeline Hero Demo */}
+        <div className="mt-12 sm:mt-16 w-full max-w-3xl">
           <VoiceHeroDemo />
         </div>
 
         {/* ------------------------------------------------------------- */}
-        {/* Core Concepts Grid */}
+        {/* Core Principles Architecture Grid */}
         {/* ------------------------------------------------------------- */}
-        <div id="concepts" className="mt-24 w-full text-left pt-12 border-t border-[#1a1a1a]">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-2">
+        <section id="concepts" className="mt-28 w-full text-left pt-14 border-t border-[#181a24]">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-3">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-[#d7f24a] uppercase tracking-wider mb-1">
+              <div className="flex items-center gap-2 text-xs font-mono text-[#d4f65b] uppercase tracking-wider mb-1.5">
                 <Terminal className="w-3.5 h-3.5" />
-                <span>OVERALL CONCEPTS // CORE PRINCIPLES</span>
+                <span>ARCHITECTURAL CORE // 4 PILLARS</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-mono font-bold text-[#f1f1ef] uppercase">
-                WHY VULTURE EXISTS
+              <h2 className="text-2xl sm:text-4xl font-mono font-extrabold text-[#f8f8f6] uppercase tracking-tight">
+                BUILT FOR FAST SQUADS
               </h2>
             </div>
-            <span className="text-xs font-mono text-[#666666]">
-              built for fast squads who hate notification fatigue
+            <span className="text-xs font-mono text-[#64748b]">
+              engineered for high-stakes operational velocity
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {/* Concept 1 */}
-            <div className="p-6 rounded-xl bg-[#131313] border border-[#222222] hover:border-[#333333] transition-colors relative overflow-hidden group">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#2b2b2b] flex items-center justify-center text-[#d7f24a]">
-                  <Mic className="w-4 h-4" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] shadow-sm">
+                  <Mic className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#555555]">01 // VOICE</span>
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
+                  01 // VOICE
+                </span>
               </div>
-              <h3 className="font-mono text-sm font-bold text-[#f1f1ef] uppercase tracking-wide mb-2">
-                ZERO-TYPING INERTIA
+              <h3 className="font-mono text-base font-bold text-[#f8f8f6] uppercase tracking-wide mb-2 flex items-center gap-2">
+                <span>ZERO-TYPING INERTIA</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#d4f65b]" />
               </h3>
-              <p className="text-xs text-[#888888] leading-relaxed">
-                Typing essays on a phone or keyboard during an active outage breaks your focus. Hold the mic, speak for 5 seconds. 
-                ElevenLabs converts spoken words into a clean, searchable transcript in milliseconds.
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-sans">
+                Typing essays on a phone or keyboard during an active outage breaks focus. Hold the mic, speak for 5 seconds. 
+                ElevenLabs Scribe extracts tokens into an exact, searchable transcript in milliseconds.
               </p>
             </div>
 
             {/* Concept 2 */}
-            <div className="p-6 rounded-xl bg-[#131313] border border-[#222222] hover:border-[#333333] transition-colors relative overflow-hidden group">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#2b2b2b] flex items-center justify-center text-[#ff9f0a]">
-                  <ShieldAlert className="w-4 h-4" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#ddd6fe] shadow-sm">
+                  <Sparkles className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#555555]">02 // TRIAGE</span>
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
+                  02 // AI TRIAGE
+                </span>
               </div>
-              <h3 className="font-mono text-sm font-bold text-[#f1f1ef] uppercase tracking-wide mb-2">
-                GEMINI 2.0 CONTEXTUAL TRIAGE
+              <h3 className="font-mono text-base font-bold text-[#f8f8f6] uppercase tracking-wide mb-2 flex items-center gap-2">
+                <span>GEMINI CONTEXTUAL HARVESTER</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#ddd6fe]" />
               </h3>
-              <p className="text-xs text-[#888888] leading-relaxed">
-                No manual tag dropdowns or priority pickers. Gemini evaluates panic versus casual status, assigns an urgency score (0–100), 
-                categorizes the broadcast (`INCIDENT`, `STATUS`, `TASK`), and dictates the half-life window.
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-sans">
+                Raw audio is noisy. Google Gemini 3.5 inspects recent channel context to infer priority, distill a 1-sentence briefing, 
+                and assign a dynamic decay window from 5 to 1,440 minutes.
               </p>
             </div>
 
             {/* Concept 3 */}
-            <div className="p-6 rounded-xl bg-[#131313] border border-[#222222] hover:border-[#333333] transition-colors relative overflow-hidden group">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#2b2b2b] flex items-center justify-center text-[#64d2ff]">
-                  <Clock className="w-4 h-4" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#fdba74] shadow-sm">
+                  <Clock className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#555555]">03 // DECAY</span>
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
+                  03 // HALF-LIFE
+                </span>
               </div>
-              <h3 className="font-mono text-sm font-bold text-[#f1f1ef] uppercase tracking-wide mb-2">
-                INFORMATION HALF-LIFE
+              <h3 className="font-mono text-base font-bold text-[#f8f8f6] uppercase tracking-wide mb-2 flex items-center gap-2">
+                <span>AUTOMATIC DECAY CURVE</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#fdba74]" />
               </h3>
-              <p className="text-xs text-[#888888] leading-relaxed">
-                Static chats archive everything equally forever. VULTURE treats information as perishable. 
-                High urgency stays pinned at top volume; expired messages quietly soften in opacity and yield space to what matters now.
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-sans">
+                Messages don&apos;t clog channels permanently. Broadcasts glow bright when fresh, gradually dim over their half-life, 
+                and expire silently so your feed remains uncluttered.
               </p>
             </div>
 
             {/* Concept 4 */}
-            <div className="p-6 rounded-xl bg-[#131313] border border-[#222222] hover:border-[#333333] transition-colors relative overflow-hidden group">
-              <div className="flex items-center justify-between mb-4">
-                <div className="w-9 h-9 rounded-lg bg-[#181818] border border-[#2b2b2b] flex items-center justify-center text-[#d7f24a]">
-                  <Users className="w-4 h-4" />
+            <div className="p-6 sm:p-7 rounded-2xl bg-[#0c0d12] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)] transition-all relative overflow-hidden group">
+              <span className="absolute top-2.5 right-2.5 text-[9px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#7dd3fc] shadow-sm">
+                  <Zap className="w-5 h-5" />
                 </div>
-                <span className="text-xs font-mono text-[#555555]">04 // SQUAD</span>
+                <span className="text-xs font-mono text-[#64748b] bg-[#090a0f] px-2.5 py-1 rounded-full border border-[#1a1d28]">
+                  04 // HAPTICS
+                </span>
               </div>
-              <h3 className="font-mono text-sm font-bold text-[#f1f1ef] uppercase tracking-wide mb-2">
-                ASYNC WALKIE-TALKIE RADIO
+              <h3 className="font-mono text-base font-bold text-[#f8f8f6] uppercase tracking-wide mb-2 flex items-center gap-2">
+                <span>TACTILE & SCREEN OVERLAY</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7dd3fc]" />
               </h3>
-              <p className="text-xs text-[#888888] leading-relaxed">
-                Engineered for teams of 3 to 8 builders. No endless thread nesting, no channel explosion. 
-                Just an ambient frequency where you stay in sync with zero meeting overhead.
+              <p className="text-xs sm:text-sm text-[#94a3b8] leading-relaxed font-sans">
+                Critical alerts command attention. When emergencies strike, VULTURE triggers synchronized rhythmic haptic vibration patterns 
+                and full-screen perimeter strobe flashes on your Android phone.
               </p>
             </div>
           </div>
-        </div>
+        </section>
 
         {/* ------------------------------------------------------------- */}
-        {/* Interactive Half-Life Decay Simulator */}
+        {/* Interactive Temporal Decay Simulator */}
         {/* ------------------------------------------------------------- */}
-        <div id="half-life" className="mt-24 w-full text-left pt-12 border-t border-[#1a1a1a]">
+        <section id="half-life" className="mt-24 w-full text-left">
           <DecaySimulator />
-        </div>
+        </section>
 
         {/* ------------------------------------------------------------- */}
-        {/* Team Members Section */}
         {/* ------------------------------------------------------------- */}
-        <div id="team" className="mt-24 w-full text-left pt-12 border-t border-[#1a1a1a]">
+        {/* Crew / Creative Collective Section */}
+        {/* ------------------------------------------------------------- */}
+        <section id="team" className="mt-28 w-full text-left scroll-mt-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-[#d7f24a] uppercase tracking-wider mb-1">
-                <Users className="w-3.5 h-3.5" />
-                <span>MEET THE CREW // TEAM MANIFEST</span>
+              <div className="flex items-center gap-2 text-xs font-mono text-[#ddd6fe] uppercase tracking-wider mb-1.5">
+                <Users className="w-3.5 h-3.5 text-[#ddd6fe]" />
+                <span>THE BUILDERS // CREATIVE MANIFEST</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-mono font-bold text-[#f1f1ef] uppercase">
-                THE MINDS BEHIND VULTURE
+              <h2 className="text-2xl sm:text-4xl font-mono font-extrabold text-[#f8f8f6] uppercase tracking-tight">
+                MEET THE CREW
               </h2>
             </div>
-
-            <Link
-              href="/team"
-              className="text-xs font-mono text-[#d7f24a] hover:underline flex items-center gap-1 group"
-            >
-              <span>VIEW FULL TEAM PAGE</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-            </Link>
+            <p className="text-xs font-mono text-[#94a3b8] max-w-sm">
+              The cross-functional engineers and architects pioneering voice-first emergency squad broadcasting.
+            </p>
           </div>
 
-          {/* Side-Scrollable Team Cards */}
-          <TeamScroller />
-        </div>
+          {/* Full Grid of Team Members */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {TEAM_MEMBERS.map((member) => (
+              <TeamCard key={member.id} member={member} />
+            ))}
+          </div>
+        </section>
 
         {/* Bottom Banner */}
-        <div className="mt-20 w-full p-8 rounded-xl bg-gradient-to-b from-[#141414] to-[#0e0e0e] border border-[#242424] text-center flex flex-col items-center">
-          <div className="w-10 h-10 rounded-full bg-[#1b1b1b] border border-[#2e2e2e] flex items-center justify-center text-[#d7f24a] mb-3">
-            <Radio className="w-5 h-5" />
-          </div>
-          <h3 className="font-mono text-lg font-bold text-[#f1f1ef] uppercase">
-            READY TO DITCH CHAT NOISE?
-          </h3>
-          <p className="text-xs text-[#888888] font-mono mt-1 max-w-md">
-            Test the live feed in demo mode with one click. Pre-seeded voice scenarios, multi-persona testing, and zero setup required.
-          </p>
+        <div className="mt-28 w-full p-8 sm:p-14 rounded-2xl bg-[#0c0d12] border border-[#1e2230] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06),0_16px_48px_rgba(0,0,0,0.6)] flex flex-col items-center text-center relative overflow-hidden">
+          <span className="absolute top-3 left-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute top-3 right-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute bottom-3 left-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
+          <span className="absolute bottom-3 right-3 text-[10px] font-mono text-[#282d3e] select-none pointer-events-none">+</span>
 
+          <div className="w-12 h-12 rounded-2xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] mb-4 shadow-sm">
+            <Radio className="w-6 h-6" />
+          </div>
+          <h3 className="font-mono text-xl sm:text-3xl font-extrabold uppercase text-[#f8f8f6] tracking-tight">
+            START BROADCASTING WITH YOUR SQUAD
+          </h3>
+          <p className="text-xs sm:text-sm text-[#94a3b8] max-w-md mt-2 font-mono">
+            Zero setup inertia. Create a channel, share an encrypted invite code, and experience time-aware voice triage.
+          </p>
           <Link
             href="/dashboard"
-            className="mt-6 px-6 py-3 rounded-lg font-mono text-xs font-bold uppercase tracking-wider bg-[#d7f24a] text-[#0e0e0e] hover:bg-[#c6e33b] transition-all shadow-[0_0_20px_rgba(215,242,74,0.15)] flex items-center gap-2"
+            className="mt-6 px-7 py-3.5 rounded-xl text-xs font-mono font-bold uppercase tracking-wider bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all shadow-[0_0_25px_rgba(212,246,91,0.22)] flex items-center gap-2"
           >
-            <span>LAUNCH SQUAD BROADCASTING</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>LAUNCH SQUAD TERMINAL</span>
+            <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-[#1a1a1a] py-8 px-6 max-w-6xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#555555]">
-        <div>
-          <span>VULTURE</span> · <span>VOICE-FIRST, TIME-AWARE BROADCASTING</span>
+      <footer className="border-t border-[#1d202d] py-8 px-6 max-w-6xl w-full mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#64748b]">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-[#d4f65b]" />
+          <span>VULTURE // PROTOCOL v0.1</span>
         </div>
-
+        <p>Built with Tiger Data PostgreSQL · Next.js · ElevenLabs · Google Gemini</p>
         <div className="flex items-center gap-4">
-          <Link href="/team" className="hover:text-[#d7f24a] transition-colors">crew</Link>
-          <span>·</span>
-          <Link href="/dashboard" className="hover:text-[#f1f1ef] transition-colors">feed</Link>
-          <span>·</span>
-          <Link href="/login" className="hover:text-[#f1f1ef] transition-colors">login</Link>
-          <span>·</span>
-          <Link href="/diagnostics" className="hover:text-[#f1f1ef] transition-colors">diagnostics</Link>
+          <Link href="/dashboard" className="hover:text-[#f8f8f6] transition-colors">
+            TERMINAL
+          </Link>
+          <a href="#team" className="hover:text-[#f8f8f6] transition-colors">
+            CREW
+          </a>
+          <a href="#concepts" className="hover:text-[#f8f8f6] transition-colors">
+            ARCHITECTURE
+          </a>
         </div>
       </footer>
     </div>

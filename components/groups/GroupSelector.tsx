@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Plus, LogIn, ChevronRight, Hash, Users, Sparkles } from "lucide-react";
+import { Plus, LogIn, ChevronRight, Hash, Users, Sparkles, Copy, Check, Radio } from "lucide-react";
 import { CreateGroupModal } from "./CreateGroupModal";
 import { JoinGroupModal } from "./JoinGroupModal";
 
@@ -23,6 +23,7 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
   const [groups, setGroups] = useState<GroupItem[]>(initialGroups);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isJoinOpen, setIsJoinOpen] = useState(false);
+  const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   const handleGroupCreated = (newGroup: any) => {
     setGroups((prev) => [
@@ -49,78 +50,112 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
     });
   };
 
+  const copyCode = (e: React.MouseEvent, code: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    setTimeout(() => setCopiedCode(null), 1800);
+  };
+
   return (
-    <div className="w-full max-w-2xl mx-auto py-6 px-4">
+    <div className="w-full max-w-3xl mx-auto py-8 px-4">
       {/* Header and Actions */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#222222]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#181a24]">
         <div>
-          <h1 className="text-xl font-mono font-bold tracking-tight text-[#f1f1ef]">
-            GROUPS
-          </h1>
-          <p className="text-xs text-[#888888] mt-0.5">
-            Select a broadcast channel or connect with an invite code.
+          <div className="flex items-center gap-2 mb-1">
+            <span className="w-2 h-2 rounded-full bg-[#d4f65b] animate-ping" />
+            <h1 className="text-xl sm:text-2xl font-mono font-bold tracking-tight text-[#f8f8f6] uppercase">
+              SQUAD CHANNELS
+            </h1>
+          </div>
+          <p className="text-xs font-mono text-[#94a3b8]">
+            Select an active tactical broadcast channel or enter an invite code.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={() => setIsJoinOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono bg-[#181818] hover:bg-[#202020] text-[#cccccc] border border-[#2b2b2b] transition-colors"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-mono bg-[#10121a] hover:bg-[#151822] text-[#cbd5e1] border border-[#1e2230] transition-all hover:border-[#2f354a]"
           >
-            <LogIn className="w-3.5 h-3.5 text-[#999999]" />
-            Join Code
+            <LogIn className="w-3.5 h-3.5 text-[#ddd6fe]" />
+            <span>JOIN CODE</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsCreateOpen(true)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-mono font-medium bg-[#f1f1ef] text-[#0e0e0e] hover:bg-[#ffffff] transition-colors"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-mono font-bold bg-[#d4f65b] text-[#08090b] hover:bg-[#c3e848] transition-all shadow-[0_0_20px_rgba(212,246,91,0.2)]"
           >
             <Plus className="w-3.5 h-3.5" />
-            New Group
+            <span>NEW CHANNEL</span>
           </button>
         </div>
       </div>
 
       {/* Group List Cards */}
-      <div className="mt-6 flex flex-col gap-3">
+      <div className="mt-6 flex flex-col gap-3.5">
         {groups.map((group) => {
           const isBusy = group.onlineCount > 1;
-          const statusText = isBusy ? `${group.onlineCount} active now` : "quiet";
 
           return (
             <Link
               key={group.id}
               href={`/groups/${group.id}`}
-              className="group block p-4 rounded-lg bg-[#141414] hover:bg-[#181818] border border-[#242424] hover:border-[#383838] transition-all"
+              className="group block p-4 sm:p-5 rounded-2xl bg-[#0c0d12] hover:bg-[#10121a] border border-[#1e2230] hover:border-[#2f354a] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] transition-all relative overflow-hidden"
             >
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono text-sm font-semibold tracking-wide text-[#f1f1ef] group-hover:text-[#ffffff]">
-                      {group.name}
-                    </span>
-                    <span className="font-mono text-[10px] text-[#555555] px-1.5 py-0.2 rounded bg-[#1b1b1b] border border-[#222222]">
-                      {group.inviteCode}
-                    </span>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-[#11131b] border border-[#1e2230] flex items-center justify-center text-[#d4f65b] group-hover:border-[#d4f65b]/50 group-hover:scale-105 transition-all">
+                    <Radio className="w-4 h-4" />
                   </div>
 
-                  <div className="flex items-center gap-2 mt-1.5 text-xs text-[#888888] font-mono">
-                    <div className="flex items-center gap-1">
-                      <Users className="w-3 h-3 text-[#666666]" />
-                      <span>{group.memberCount} members</span>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-base font-mono font-bold text-[#f8f8f6] group-hover:text-[#d4f65b] transition-colors">
+                        {group.name}
+                      </h2>
                     </div>
-                    <span>·</span>
-                    <span className={isBusy ? "text-[#34c759]" : "text-[#777777]"}>
-                      {statusText}
-                    </span>
+
+                    <div className="flex items-center gap-3 mt-1 text-xs font-mono text-[#94a3b8]">
+                      <span className="flex items-center gap-1">
+                        <Users className="w-3 h-3 text-[#64748b]" />
+                        <span>{group.memberCount} squad members</span>
+                      </span>
+
+                      <span className="text-[#3b4054]">·</span>
+
+                      <span className="flex items-center gap-1.5">
+                        <span className={`w-1.5 h-1.5 rounded-full ${isBusy ? "bg-[#86efac] animate-pulse" : "bg-[#64748b]"}`} />
+                        <span className={isBusy ? "text-[#86efac] font-medium" : "text-[#64748b]"}>
+                          {isBusy ? `${group.onlineCount} online` : "quiet"}
+                        </span>
+                      </span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1 text-xs text-[#555555] group-hover:text-[#d7f24a] transition-colors">
-                  <span className="hidden sm:inline font-mono text-[11px]">open</span>
-                  <ChevronRight className="w-4 h-4" />
+                {/* Right Area: Invite Code & Arrow */}
+                <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 sm:pt-0 border-t sm:border-t-0 border-[#181a24]">
+                  <button
+                    type="button"
+                    onClick={(e) => copyCode(e, group.inviteCode)}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#10121a] hover:bg-[#151822] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#1e2230] transition-colors"
+                    title="Click to copy invite code"
+                  >
+                    <span>CODE: {group.inviteCode}</span>
+                    {copiedCode === group.inviteCode ? (
+                      <Check className="w-3 h-3 text-[#86efac]" />
+                    ) : (
+                      <Copy className="w-3 h-3 text-[#64748b]" />
+                    )}
+                  </button>
+
+                  <div className="w-8 h-8 rounded-lg bg-[#10121a] border border-[#1e2230] flex items-center justify-center text-[#94a3b8] group-hover:text-[#d4f65b] group-hover:border-[#d4f65b]/50 transition-all">
+                    <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                  </div>
                 </div>
               </div>
             </Link>
@@ -128,21 +163,22 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
         })}
 
         {groups.length === 0 && (
-          <div className="py-12 text-center border border-dashed border-[#262626] rounded-lg">
-            <p className="text-xs text-[#777777] font-mono">No active groups.</p>
-            <p className="text-xs text-[#555555] mt-1">
-              Create a new group or join with an invite code to begin broadcasting.
+          <div className="p-12 text-center border border-dashed border-[#1e2230] rounded-2xl">
+            <Radio className="w-8 h-8 text-[#64748b] mx-auto mb-2" />
+            <p className="font-mono text-sm text-[#94a3b8]">No broadcast channels joined yet.</p>
+            <p className="font-mono text-xs text-[#64748b] mt-1">
+              Create a new channel or join with an existing squad invite code.
             </p>
           </div>
         )}
       </div>
 
+      {/* Modals */}
       <CreateGroupModal
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
         onGroupCreated={handleGroupCreated}
       />
-
       <JoinGroupModal
         isOpen={isJoinOpen}
         onClose={() => setIsJoinOpen(false)}

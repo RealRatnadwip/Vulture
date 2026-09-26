@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { MessageWithSender } from "@/lib/db";
 import { getMessageRelevance, formatBroadcastTime } from "@/lib/utils/relevance";
-import { Clock, ShieldAlert } from "lucide-react";
+import { Clock, ShieldAlert, AlertTriangle, Radio, Sparkles, Volume2, Play, Pause, CornerDownRight } from "lucide-react";
 
 interface MessageCardProps {
   message: MessageWithSender;
@@ -12,69 +12,90 @@ interface MessageCardProps {
 }
 
 export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps) {
+  const [isPlaying, setIsPlaying] = useState(false);
   const relevance = getMessageRelevance(message);
+
   const isCritical = message.priority === "CRITICAL";
   const isHigh = message.priority === "HIGH";
   const isLow = message.priority === "LOW";
   const isExpired = relevance.state === "EXPIRED";
 
-  // Card border styling
-  let borderClass = "border-l-2 border-[#262626]";
+  // Card border styling with bright pastel edges
+  let borderClass = "border-l-4 border-l-[#2a2e3f] border-[#1e2230]";
   if (isCritical) {
-    borderClass = "border-l-2 border-l-[#ff453a] border-t-[#291b1b] border-r-[#241c1c] border-b-[#241c1c]";
+    borderClass = "border-l-4 border-l-[#fda4af] border-[#1e2230] shadow-[0_0_20px_rgba(253,164,175,0.08)]";
   } else if (isHigh) {
-    borderClass = "border-l-2 border-l-[#ff9f0a]";
+    borderClass = "border-l-4 border-l-[#fdba74] border-[#1e2230]";
   } else if (isLow) {
-    borderClass = "border-l-2 border-l-[#3a3a3c]";
+    borderClass = "border-l-4 border-l-[#7dd3fc] border-[#1e2230]";
+  } else {
+    borderClass = "border-l-4 border-l-[#d4f65b] border-[#1e2230]";
   }
+
+  const togglePlay = () => {
+    setIsPlaying(!isPlaying);
+    // If audio is provided, can control html audio element
+  };
 
   return (
     <article
-      className={`relative p-4 rounded-md bg-[#151515] border border-[#242424] transition-all ${borderClass} ${
-        isExpired ? "opacity-50 hover:opacity-80" : ""
-      } ${isNew ? "ring-1 ring-[#d7f24a]/30 animate-in fade-in slide-in-from-top-2" : ""}`}
+      className={`relative p-5 rounded-2xl bg-[#0c0d12] border transition-all shadow-[inset_0_1px_0_0_rgba(255,255,255,0.05)] ${borderClass} ${
+        isExpired ? "opacity-45 hover:opacity-75" : ""
+      } ${isNew ? "ring-2 ring-[#d4f65b]/40 animate-in fade-in slide-in-from-top-2" : ""}`}
     >
-      {/* Priority Ribbon / Header */}
-      <div className="flex items-center justify-between gap-2 mb-2">
+      {/* Priority Ribbon & Time-Decay Header */}
+      <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-2">
           {isCritical && (
             <button
               type="button"
               onClick={() => onTriggerAlert?.(message)}
-              className="flex items-center gap-1.5 hover:opacity-85 transition-opacity cursor-pointer group"
+              className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#fda4af]/15 border border-[#fda4af]/40 hover:bg-[#fda4af]/25 transition-all cursor-pointer group"
               title="Click to view full-screen emergency takeover"
             >
-              <span className="w-2 h-2 rounded-full bg-[#ff453a] critical-indicator" />
-              <span className="font-mono text-[11px] font-bold tracking-wider text-[#ff453a] uppercase group-hover:underline">
-                CRITICAL PRIORITY [TAP FOR ALERT]
+              <span className="w-2 h-2 rounded-full bg-[#fda4af] critical-indicator" />
+              <span className="font-mono text-[11px] font-bold tracking-wider text-[#fda4af] uppercase">
+                CRITICAL // TAP FOR TAKEOVER
               </span>
             </button>
           )}
 
           {isHigh && (
-            <span className="font-mono text-[11px] font-semibold tracking-wider text-[#ff9f0a] uppercase">
+            <span className="font-mono text-[11px] font-bold tracking-wider text-[#fdba74] uppercase px-2.5 py-0.5 rounded-full bg-[#fdba74]/15 border border-[#fdba74]/35">
               HIGH PRIORITY
             </span>
           )}
 
           {!isCritical && !isHigh && !isLow && (
-            <span className="font-mono text-[10px] tracking-wider text-[#666666] uppercase">
-              NORMAL
+            <span className="font-mono text-[11px] font-bold tracking-wider text-[#d4f65b] uppercase px-2.5 py-0.5 rounded-full bg-[#d4f65b]/12 border border-[#d4f65b]/35">
+              SQUAD BROADCAST
             </span>
           )}
 
           {isLow && (
-            <span className="font-mono text-[10px] tracking-wider text-[#444444] uppercase">
-              LOW
+            <span className="font-mono text-[10px] tracking-wider text-[#7dd3fc] uppercase px-2 py-0.5 rounded-full bg-[#7dd3fc]/10 border border-[#7dd3fc]/30">
+              ROUTINE COMM
+            </span>
+          )}
+
+          {message.category && (
+            <span className="font-mono text-[10px] text-[#64748b] hidden sm:inline">
+              // {message.category}
             </span>
           )}
         </div>
 
-        {/* Relevance / Time indicator */}
-        <div className="flex items-center gap-1 text-[11px] font-mono text-[#666666]">
-          <Clock className="w-3 h-3" />
+        {/* Time-Decay relative clock */}
+        <div className="flex items-center gap-1.5 text-xs font-mono text-[#94a3b8] px-2.5 py-0.5 rounded-full bg-[#10121a] border border-[#1e2230]">
+          <Clock className="w-3 h-3 text-[#d4f65b]" />
           <span
-            className={relevance.state === "EXPIRING" ? "text-[#ff9f0a]" : ""}
+            className={
+              relevance.state === "EXPIRING"
+                ? "text-[#fdba74] font-medium"
+                : isExpired
+                ? "text-[#64748b]"
+                : "text-[#94a3b8]"
+            }
             suppressHydrationWarning
           >
             {relevance.label}
@@ -83,67 +104,54 @@ export function MessageCard({ message, isNew, onTriggerAlert }: MessageCardProps
       </div>
 
       {/* Sender line & Timestamp */}
-      <div className="flex items-center gap-2 mb-2 text-xs">
-        <span className={`font-medium ${isExpired ? "text-[#888888]" : "text-[#e2e2e0]"}`}>
-          {message.sender.name}
-        </span>
-        <span className="text-[#444444]">·</span>
-        <time className="text-[#777777] font-mono text-[11px]" suppressHydrationWarning>
-          {formatBroadcastTime(message.createdAt)}
-        </time>
+      <div className="flex items-center justify-between mb-3 text-xs">
+        <div className="flex items-center gap-2">
+          <div className="w-5 h-5 rounded-full bg-[#11131b] border border-[#1e2230] flex items-center justify-center font-mono text-[10px] font-bold text-[#d4f65b]">
+            {message.sender.name.charAt(0).toUpperCase()}
+          </div>
+          <span className={`font-mono font-bold ${isExpired ? "text-[#94a3b8]" : "text-[#f8f8f6]"}`}>
+            {message.sender.name}
+          </span>
+          <span className="text-[#3b4054]">·</span>
+          <time className="text-[#64748b] font-mono text-[11px]" suppressHydrationWarning>
+            {formatBroadcastTime(message.createdAt)}
+          </time>
+        </div>
+
+        {/* Audio Duration if voice */}
+        {message.durationMs && (
+          <span className="font-mono text-[11px] text-[#94a3b8] flex items-center gap-1">
+            <Volume2 className="w-3 h-3 text-[#d4f65b]" />
+            <span>{Math.round(message.durationMs / 1000)}s</span>
+          </span>
+        )}
       </div>
 
-
-      {/* Transcript / Spoken content */}
-      <div className="mb-3">
+      {/* Spoken Transcript */}
+      <div className="mb-3.5">
         <p
-          className={`text-sm leading-relaxed ${
-            isCritical
-              ? "text-[#f5f5f3] font-medium"
-              : isLow
-              ? "text-[#8e8e93]"
-              : isExpired
-              ? "text-[#777777]"
-              : "text-[#d8d8d6]"
+          className={`text-sm leading-relaxed font-mono ${
+            isExpired ? "text-[#64748b] line-through" : "text-[#f8f8f6]"
           }`}
         >
           {message.transcript}
         </p>
-
-        {/* Gemini Summary */}
-        {message.summary && message.summary !== message.transcript && (
-          <div className="mt-2 text-xs text-[#999999] bg-[#111111] border border-[#222222] px-2.5 py-1.5 rounded font-mono">
-            <span className="text-[#666666] mr-1.5">signal:</span>
-            {message.summary}
-          </div>
-        )}
       </div>
 
-      {/* Footer Tags */}
-      <div className="flex items-center justify-between text-[10px] font-mono text-[#666666] pt-2 border-t border-[#1c1c1c]">
-        <div className="flex items-center gap-2">
-          <span className="uppercase text-[#888888] tracking-wider">{message.category}</span>
-          <span>·</span>
-          <span className="uppercase">{message.priority}</span>
-        </div>
-
-        {message.urgencyScore !== undefined && (
-          <div className="flex items-center gap-1">
-            <span className="text-[#555555]">urgency</span>
-            <span
-              className={`font-semibold ${
-                message.urgencyScore >= 80
-                  ? "text-[#ff453a]"
-                  : message.urgencyScore >= 60
-                  ? "text-[#ff9f0a]"
-                  : "text-[#888888]"
-              }`}
-            >
-              {message.urgencyScore}/100
+      {/* AI Summary Card (Gemini Extraction) */}
+      {message.summary && (
+        <div className="p-3 rounded-xl bg-[#090a0f] border border-[#1a1d28] flex items-start gap-2.5">
+          <Sparkles className="w-3.5 h-3.5 text-[#ddd6fe] shrink-0 mt-0.5" />
+          <div className="flex-1 min-w-0">
+            <span className="font-mono text-[10px] font-bold text-[#ddd6fe] uppercase tracking-wider block mb-0.5">
+              Gemini AI Summary:
             </span>
+            <p className="font-mono text-xs text-[#cbd5e1] leading-relaxed">
+              &ldquo;{message.summary}&rdquo;
+            </p>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </article>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Filter, Search } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 
 export type FilterType = "ALL" | "IMPORTANT" | "RECENT";
 
@@ -21,16 +21,16 @@ export function FeedFilters({
   counts,
 }: FeedFiltersProps) {
   return (
-    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 py-2 border-b border-[#222222]">
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 py-3 border-b border-[#181a24]">
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1 bg-[#141414] p-0.5 rounded border border-[#242424]">
+      <div className="flex items-center gap-1.5 bg-[#090a0f] p-1 rounded-xl border border-[#1e2230]">
         <button
           type="button"
           onClick={() => onFilterChange("ALL")}
-          className={`px-3 py-1 text-xs font-mono rounded transition-colors ${
+          className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all ${
             currentFilter === "ALL"
-              ? "bg-[#222222] text-[#f1f1ef] font-medium"
-              : "text-[#777777] hover:text-[#cccccc]"
+              ? "bg-[#11131b] text-[#d4f65b] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
           ALL ({counts.all})
@@ -39,45 +39,45 @@ export function FeedFilters({
         <button
           type="button"
           onClick={() => onFilterChange("IMPORTANT")}
-          className={`px-3 py-1 text-xs font-mono rounded transition-colors flex items-center gap-1.5 ${
+          className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all flex items-center gap-1.5 ${
             currentFilter === "IMPORTANT"
-              ? "bg-[#222222] text-[#ff9f0a] font-medium"
-              : "text-[#777777] hover:text-[#cccccc]"
+              ? "bg-[#11131b] text-[#fda4af] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-[#ff9f0a]" />
-          IMPORTANT ({counts.important})
+          <span className="w-1.5 h-1.5 rounded-full bg-[#fda4af]" />
+          CRITICAL & HIGH ({counts.important})
         </button>
 
         <button
           type="button"
           onClick={() => onFilterChange("RECENT")}
-          className={`px-3 py-1 text-xs font-mono rounded transition-colors ${
+          className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all ${
             currentFilter === "RECENT"
-              ? "bg-[#222222] text-[#f1f1ef] font-medium"
-              : "text-[#777777] hover:text-[#cccccc]"
+              ? "bg-[#11131b] text-[#7dd3fc] font-bold border border-[#1e2230] shadow-sm"
+              : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#10121a]"
           }`}
         >
           RECENT
         </button>
       </div>
 
-      {/* Lightweight Search */}
+      {/* Modern Search */}
       <div className="relative flex-1 sm:max-w-xs">
-        <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-[#555555]" />
+        <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#64748b]" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Filter messages..."
-          className="w-full pl-8 pr-3 py-1 text-xs bg-[#141414] border border-[#242424] rounded text-[#e0e0e0] placeholder-[#555555] focus:outline-none focus:border-[#444444] transition-colors"
+          placeholder="Search transcripts or tags..."
+          className="w-full pl-9 pr-8 py-1.5 text-xs font-mono bg-[#090a0f] border border-[#1e2230] rounded-xl text-[#f8f8f6] placeholder-[#64748b] focus:outline-none focus:border-[#d4f65b]/50 focus:ring-1 focus:ring-[#d4f65b]/30 transition-all"
         />
         {searchQuery && (
           <button
             onClick={() => onSearchChange("")}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[#666666] hover:text-[#999999]"
+            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#64748b] hover:text-[#f8f8f6] p-0.5"
           >
-            clear
+            <X className="w-3 h-3" />
           </button>
         )}
       </div>

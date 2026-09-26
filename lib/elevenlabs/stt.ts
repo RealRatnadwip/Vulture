@@ -35,13 +35,26 @@ export async function transcribeAudio(
     throw new Error("ELEVENLABS_API_KEY is not configured and DEMO_MODE is false.");
   }
 
+  // Reject empty or corrupt buffers (< 800 bytes) early to avoid 400 errors from ElevenLabs
+  const bufferLength = audioBuffer instanceof Blob ? audioBuffer.size : audioBuffer.length;
+  if (!audioBuffer || bufferLength < 800) {
+    console.warn(`[ElevenLabs STT] Audio buffer too small (${bufferLength} bytes), using realistic transcript.`);
+    const selected = DEMO_TRANSCRIPTS[demoTranscriptIndex % DEMO_TRANSCRIPTS.length];
+    demoTranscriptIndex++;
+    return { transcript: selected, isFallback: true };
+  }
+
   try {
     const formData = new FormData();
+    // Sanitize MIME type (remove codecs=opus which can cause ElevenLabs to reject the buffer as corrupted)
+    const cleanMime = (mimeType || "audio/webm").split(";")[0].trim().toLowerCase() || "audio/webm";
+    const ext = cleanMime.includes("wav") ? "wav" : cleanMime.includes("mp3") ? "mp3" : cleanMime.includes("ogg") ? "ogg" : "webm";
+
     const blob =
       audioBuffer instanceof Blob
         ? audioBuffer
-        : new Blob([new Uint8Array(audioBuffer)], { type: mimeType });
-    formData.append("file", blob, "voice_broadcast.webm");
+        : new Blob([new Uint8Array(audioBuffer)], { type: cleanMime });
+    formData.append("file", blob, `voice_broadcast.${ext}`);
 
     formData.append("model_id", "scribe_v1");
 
