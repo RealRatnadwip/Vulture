@@ -99,69 +99,65 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
     if (disabled || state !== "IDLE") return;
     setErrorMsg(null);
 
+    // Tactile haptic pulse on record start
+    if (typeof window !== "undefined" && "vibrate" in navigator) {
+      try { navigator.vibrate(45); } catch {}
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioChunksRef.current = [];
 
-      // Determine supported mime type
-      let mimeType = "audio/webm";
-      if (!MediaRecorder.isTypeSupported("audio/webm")) {
-        if (MediaRecorder.isTypeSupported("audio/mp4")) mimeType = "audio/mp4";
-        else if (MediaRecorder.isTypeSupported("audio/ogg")) mimeType = "audio/ogg";
-      }
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
+        ? "audio/webm;codecs=opus"
+        : "audio/webm";
 
-      const recorder = new MediaRecorder(stream, { mimeType });
-      mediaRecorderRef.current = recorder;
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
+      mediaRecorderRef.current = mediaRecorder;
 
-      recorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
           audioChunksRef.current.push(event.data);
         }
       };
 
-      recorder.onstop = () => {
-        const recordedBlob = new Blob(audioChunksRef.current, { type: mimeType });
-        const recordedMs = Date.now() - startTimeRef.current;
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType });
+        const recordingDuration = Date.now() - startTimeRef.current;
 
-        // Stop all tracks to release mic hardware
+        // Stop all tracks on the stream to release hardware mic
         stream.getTracks().forEach((track) => track.stop());
 
-        if (recordedMs < 600) {
-          setErrorMsg("Hold longer to speak (minimum 0.6s)");
-          setState("IDLE");
-          return;
-        }
-
-        sendAudioToServer(recordedBlob, recordedMs);
+        sendAudioToServer(audioBlob, recordingDuration);
       };
 
-      recorder.start(100);
+      mediaRecorder.start(100);
       startTimeRef.current = Date.now();
       setState("RECORDING");
       setDuration(0);
 
-      // Native mobile tactile feedback for PTT activation
-      if (typeof window !== "undefined" && "vibrate" in navigator) {
-        try { navigator.vibrate(45); } catch {}
-      }
-
       timerRef.current = setInterval(() => {
-        setDuration(Math.floor((Date.now() - startTimeRef.current) / 1000));
-      }, 200);
+        const elapsed = Math.floor((Date.now() - startTimeRef.current) / 1000);
+        setDuration(elapsed);
+
+        // Auto-stop at 30 seconds
+        if (elapsed >= 30) {
+          stopRecording();
+        }
+      }, 500);
     } catch (err: unknown) {
-      console.warn("[MicrophoneButton] Permission error:", err);
-      const isDenied = err instanceof DOMException && (err.name === "NotAllowedError" || err.name === "PermissionDeniedError");
-      setErrorMsg(
-        isDenied
-          ? "Microphone access blocked. Enable permissions or use the simulator below."
-          : "Microphone unavailable on this device."
-      );
+      console.error("[MicrophoneButton] Mic access error:", err);
+      const msg = err instanceof Error ? err.message : "Microphone permission denied";
+      setErrorMsg(msg);
       setState("IDLE");
+      isHoldingRef.current = false;
     }
   };
 
   const stopRecording = () => {
-    // Release tactile pulse on mobile
+    if (state !== "RECORDING") return;
+
+    // Tactile haptic pulse on record stop
     if (typeof window !== "undefined" && "vibrate" in navigator) {
       try { navigator.vibrate(25); } catch {}
     }
@@ -176,8 +172,8 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
     }
   };
 
-  // Mouse handlers
   const handleMouseDown = () => {
+    if (disabled || state !== "IDLE") return;
     isHoldingRef.current = true;
     startRecording();
   };
@@ -189,9 +185,9 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
     }
   };
 
-  // Touch handlers
   const handleTouchStart = (e: React.TouchEvent) => {
     e.preventDefault();
+    if (disabled || state !== "IDLE") return;
     isHoldingRef.current = true;
     startRecording();
   };
@@ -230,17 +226,17 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
   const isBusy = state === "PROCESSING" || state === "TRANSCRIBING" || state === "CLASSIFYING";
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full max-w-md mx-auto py-2">
+    <div className="flex flex-col items-center gap-2.5 w-full max-w-md mx-auto">
       {/* Error alert if any */}
       {errorMsg && (
-        <div className="flex items-center gap-2 text-xs text-[#ff6b6b] bg-[#221010] border border-[#441a1a] px-3 py-1.5 rounded w-full justify-between animate-in fade-in">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 text-xs font-mono text-[#fda4af] bg-[#25151b] border border-[#4d232c] px-3.5 py-1.5 rounded-xl w-full justify-between animate-in fade-in">
+          <div className="flex items-center gap-2">
             <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
             <span>{errorMsg}</span>
           </div>
           <button
             onClick={() => setErrorMsg(null)}
-            className="text-[10px] text-[#ff8e8e] hover:underline ml-2"
+            className="text-[10px] text-[#fda4af] hover:underline ml-2"
           >
             Dismiss
           </button>
@@ -251,7 +247,7 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
       <div className="relative flex flex-col items-center">
         {/* Pulsing ring during recording */}
         {state === "RECORDING" && (
-          <div className="absolute inset-0 -m-3 rounded-full bg-[#d7f24a]/20 mic-recording-ring pointer-events-none" />
+          <div className="absolute inset-0 -m-3 rounded-full bg-[#d4f65b]/25 mic-recording-ring pointer-events-none" />
         )}
 
         <button
@@ -265,26 +261,26 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
           onKeyDown={handleKeyDown}
           onKeyUp={handleKeyUp}
           disabled={disabled || isBusy}
-          className={`relative group w-20 h-20 rounded-full flex flex-col items-center justify-center transition-all select-none focus:outline-none focus:ring-2 focus:ring-[#d7f24a]/40 ${
+          className={`relative group w-20 h-20 rounded-full flex flex-col items-center justify-center transition-all select-none focus:outline-none focus:ring-2 focus:ring-[#d4f65b]/50 ${
             state === "RECORDING"
-              ? "bg-[#d7f24a] text-[#0e0e0e] shadow-[0_0_25px_rgba(215,242,74,0.4)] scale-105"
+              ? "bg-[#d4f65b] text-[#08090b] shadow-[0_0_35px_rgba(212,246,91,0.5)] scale-105"
               : isBusy
-              ? "bg-[#181818] border border-[#2d2d2d] text-[#d7f24a] cursor-wait"
-              : "bg-[#161616] border border-[#2d2d2d] hover:border-[#444444] text-[#e0e0e0] hover:text-[#f1f1ef] active:scale-95"
+              ? "bg-[#141724] border border-[#2b3147] text-[#d4f65b] cursor-wait"
+              : "bg-[#12141e] border border-[#282d40] hover:border-[#d4f65b]/60 text-[#f8f8f6] hover:shadow-[0_0_20px_rgba(212,246,91,0.18)] active:scale-95"
           }`}
         >
           {isBusy ? (
-            <Loader2 className="w-7 h-7 animate-spin text-[#d7f24a]" />
+            <Loader2 className="w-7 h-7 animate-spin text-[#d4f65b]" />
           ) : (
             <Mic
               className={`w-7 h-7 transition-transform ${
-                state === "RECORDING" ? "scale-110 text-[#0e0e0e]" : "text-[#d7f24a] group-hover:scale-105"
+                state === "RECORDING" ? "scale-110 text-[#08090b]" : "text-[#d4f65b] group-hover:scale-105"
               }`}
             />
           )}
 
           {state === "RECORDING" && (
-            <span className="font-mono text-[10px] font-bold text-[#0e0e0e] mt-0.5">
+            <span className="font-mono text-[10px] font-bold text-[#08090b] mt-0.5">
               {formatTimer(duration)}
             </span>
           )}
@@ -293,35 +289,35 @@ export function MicrophoneButton({ groupId, onMessageBroadcasted, disabled }: Mi
         {/* State Label */}
         <div className="mt-2 text-center h-5">
           {state === "IDLE" && (
-            <span className="text-xs font-mono text-[#888888] tracking-wide uppercase">
-              hold to speak
+            <span className="text-[11px] font-mono text-[#94a3b8] tracking-widest uppercase">
+              hold to broadcast
             </span>
           )}
           {state === "RECORDING" && (
-            <div className="flex items-center gap-1.5 text-xs font-mono text-[#d7f24a]">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#ff453a] animate-pulse" />
+            <div className="flex items-center gap-1.5 text-xs font-mono text-[#d4f65b] font-bold">
+              <span className="inline-block w-2 h-2 rounded-full bg-[#fda4af] animate-pulse" />
               <span>recording broadcast...</span>
             </div>
           )}
           {state === "PROCESSING" && (
-            <span className="text-xs font-mono text-[#999999] animate-pulse">
-              processing voice...
+            <span className="text-xs font-mono text-[#94a3b8] animate-pulse">
+              processing audio...
             </span>
           )}
           {state === "TRANSCRIBING" && (
-            <span className="text-xs font-mono text-[#999999] animate-pulse">
-              transcribing voice...
+            <span className="text-xs font-mono text-[#d4f65b] animate-pulse">
+              transcribing speech...
             </span>
           )}
           {state === "CLASSIFYING" && (
-            <span className="text-xs font-mono text-[#d7f24a] animate-pulse">
-              finding the signal...
+            <span className="text-xs font-mono text-[#ddd6fe] animate-pulse">
+              Gemini inferring urgency...
             </span>
           )}
         </div>
       </div>
 
-      {/* Demo audio selector */}
+      {/* Demo preset audio selector */}
       <DemoAudioSelector onSelectTranscript={sendTranscriptToServer} disabled={isBusy} />
     </div>
   );

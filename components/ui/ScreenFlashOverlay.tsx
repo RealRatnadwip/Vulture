@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { PriorityLevel } from "@/lib/validation";
 import { PRIORITY_CONFIG, triggerPriorityVibration } from "@/lib/utils/hapticsAndAlerts";
-import { AlertTriangle, Radio, ShieldAlert, X, Volume2 } from "lucide-react";
+import { AlertTriangle, Radio, ShieldAlert, X, Volume2, Sparkles } from "lucide-react";
 
 export interface FlashAlertData {
   id: string;
@@ -43,7 +43,7 @@ function playTacticalCue(priority: PriorityLevel) {
 
     switch (priority) {
       case "CRITICAL":
-        // Urgent dual high-pitch chirp (880Hz -> 1200Hz)
+        // Urgent dual high-pitch chirp (880Hz -> 1320Hz)
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(880, now);
         osc.frequency.exponentialRampToValueAtTime(1320, now + 0.12);
@@ -84,7 +84,7 @@ function playTacticalCue(priority: PriorityLevel) {
         osc.stop(now + 0.12);
         break;
     }
-  } catch (err) {
+  } catch {
     // Audio autoplay might be blocked before first user touch; safe to ignore
   }
 }
@@ -109,7 +109,7 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
     // 3. Screen flash animation duration
     const flashTimer = setTimeout(() => {
       setIsFlashing(false);
-    }, 1200);
+    }, 1100);
 
     // 4. Auto dismiss toast after 3.2 seconds
     if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
@@ -117,7 +117,7 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
       setVisibleToast(false);
       setCurrentAlert(null);
       if (onDismiss) onDismiss();
-    }, 3200);
+    }, 3400);
 
     return () => clearTimeout(flashTimer);
   }, [onDismiss]);
@@ -129,7 +129,7 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
     }
   }, [alertProp, triggerAlertEffect]);
 
-  // Also listen for global custom events: window.dispatchEvent(new CustomEvent('vulture:flash', { detail: ... }))
+  // Listen for global custom events: window.dispatchEvent(new CustomEvent('vulture:flash', { detail: ... }))
   useEffect(() => {
     const handleFlashEvent = (event: CustomEvent<FlashAlertData>) => {
       if (event.detail) {
@@ -176,22 +176,22 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
           >
             {/* Top-left corner */}
             <div
-              className="absolute top-2 left-2 w-6 h-6 border-t-4 border-l-4"
+              className="absolute top-3 left-3 w-8 h-8 border-t-4 border-l-4 rounded-tl-lg"
               style={{ borderColor: cfg.borderColor }}
             />
             {/* Top-right corner */}
             <div
-              className="absolute top-2 right-2 w-6 h-6 border-t-4 border-r-4"
+              className="absolute top-3 right-3 w-8 h-8 border-t-4 border-r-4 rounded-tr-lg"
               style={{ borderColor: cfg.borderColor }}
             />
             {/* Bottom-left corner */}
             <div
-              className="absolute bottom-2 left-2 w-6 h-6 border-b-4 border-l-4"
+              className="absolute bottom-3 left-3 w-8 h-8 border-b-4 border-l-4 rounded-bl-lg"
               style={{ borderColor: cfg.borderColor }}
             />
             {/* Bottom-right corner */}
             <div
-              className="absolute bottom-2 right-2 w-6 h-6 border-b-4 border-r-4"
+              className="absolute bottom-3 right-3 w-8 h-8 border-b-4 border-r-4 rounded-br-lg"
               style={{ borderColor: cfg.borderColor }}
             />
           </div>
@@ -200,27 +200,27 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
 
       {/* 2. Tactical Heads-Up Display (HUD) Dropdown Banner */}
       {visibleToast && currentAlert && (
-        <div className="fixed top-4 left-4 right-4 z-[101] max-w-lg mx-auto pointer-events-auto">
+        <div className="fixed top-5 left-4 right-4 z-[101] max-w-lg mx-auto pointer-events-auto">
           <div
-            className="relative flex items-center justify-between p-3.5 sm:p-4 rounded-xl backdrop-blur-xl border shadow-2xl transition-all animate-in slide-in-from-top-6 duration-300"
+            className="relative flex items-center justify-between p-4 rounded-2xl backdrop-blur-2xl border shadow-2xl transition-all animate-in slide-in-from-top-6 duration-300"
             style={{
-              backgroundColor: "rgba(18, 18, 18, 0.96)",
+              backgroundColor: "rgba(12, 14, 21, 0.95)",
               borderColor: cfg.borderColor,
-              boxShadow: `0 8px 30px rgba(0,0,0,0.8), 0 0 20px ${cfg.badgeBg}`,
+              boxShadow: `0 15px 40px rgba(0,0,0,0.9), 0 0 25px ${cfg.badgeBg}`,
             }}
           >
             <div className="flex items-start gap-3 min-w-0 flex-1 pr-2">
               {/* Pulsing Priority Beacon */}
               <div
-                className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+                className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
                 style={{ backgroundColor: cfg.badgeBg, border: `1px solid ${cfg.badgeBorder}` }}
               >
                 {priority === "CRITICAL" ? (
-                  <ShieldAlert className="w-4 h-4 text-[#ff453a] animate-pulse" />
+                  <ShieldAlert className="w-4 h-4 text-[#fda4af] animate-pulse" />
                 ) : priority === "HIGH" ? (
-                  <AlertTriangle className="w-4 h-4 text-[#ff9f0a]" />
+                  <AlertTriangle className="w-4 h-4 text-[#fdba74]" />
                 ) : (
-                  <Radio className="w-4 h-4 text-[#d7f24a]" />
+                  <Radio className="w-4 h-4 text-[#d4f65b]" />
                 )}
               </div>
 
@@ -228,7 +228,7 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
-                    className="font-mono text-[10px] font-bold tracking-wider uppercase px-1.5 py-0.5 rounded"
+                    className="font-mono text-[10px] font-bold tracking-wider uppercase px-2 py-0.5 rounded-full"
                     style={{
                       backgroundColor: cfg.badgeBg,
                       color: cfg.badgeText,
@@ -239,19 +239,19 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
                   </span>
 
                   {currentAlert.senderName && (
-                    <span className="font-mono text-xs font-semibold text-[#f1f1ef] truncate">
+                    <span className="font-mono text-xs font-bold text-[#f8f8f6] truncate">
                       {currentAlert.senderName}
                     </span>
                   )}
 
                   {currentAlert.category && (
-                    <span className="font-mono text-[10px] text-[#777777] hidden sm:inline">
+                    <span className="font-mono text-[10px] text-[#64748b] hidden sm:inline">
                       // {currentAlert.category}
                     </span>
                   )}
                 </div>
 
-                <p className="mt-1 font-mono text-xs text-[#d1d1cd] truncate">
+                <p className="mt-1 font-mono text-xs text-[#cbd5e1] truncate leading-normal">
                   {currentAlert.summary || currentAlert.transcript || "New broadcast transmission received"}
                 </p>
               </div>
@@ -265,7 +265,7 @@ export function ScreenFlashOverlay({ alert: alertProp, onDismiss }: ScreenFlashO
                 setCurrentAlert(null);
                 if (onDismiss) onDismiss();
               }}
-              className="p-1 rounded-md text-[#777777] hover:text-[#f1f1ef] hover:bg-[#252525] transition-colors shrink-0"
+              className="p-1 rounded-lg text-[#64748b] hover:text-[#f8f8f6] hover:bg-[#1a1e2d] transition-colors shrink-0"
               title="Dismiss notification"
             >
               <X className="w-4 h-4" />

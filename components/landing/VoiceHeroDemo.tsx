@@ -16,6 +16,7 @@ import {
   Volume2,
   Cpu,
   RefreshCw,
+  Terminal,
 } from "lucide-react";
 import { PriorityLevel } from "@/lib/validation";
 import { triggerPriorityVibration } from "@/lib/utils/hapticsAndAlerts";
@@ -44,25 +45,25 @@ const PRESET_SCENARIOS = [
   {
     label: "Outage",
     priority: "CRITICAL",
-    badgeColor: "#ff453a",
+    badgeColor: "#FDA4AF",
     text: "Urgent: Primary PostgreSQL connection pool exhausted! Production requests failing across US-East, failover initiated!",
   },
   {
     label: "Schedule",
     priority: "HIGH",
-    badgeColor: "#ff9f0a",
+    badgeColor: "#FDBA74",
     text: "Sprint review moved forward to 3:30 PM today. Please have deployment dashboards ready.",
   },
   {
     label: "Status",
     priority: "NORMAL",
-    badgeColor: "#d7f24a",
+    badgeColor: "#D4F65B",
     text: "Frontend v2.4 deployed to staging environment. Feel free to review the new voice interface.",
   },
   {
     label: "Casual",
     priority: "LOW",
-    badgeColor: "#64d2ff",
+    badgeColor: "#7DD3FC",
     text: "Grabbing a coffee downstairs with the infra team, will be back at my desk in 15 minutes.",
   },
 ];
@@ -102,7 +103,6 @@ export function VoiceHeroDemo() {
         const formData = new FormData();
         formData.append("audio", payload.audioBlob, "live_demo.webm");
 
-        // Small visual delay indicator for Gemini step
         const classifyStepTimer = setTimeout(() => {
           setState("CLASSIFYING");
         }, 900);
@@ -194,7 +194,6 @@ export function VoiceHeroDemo() {
       timerRef.current = setInterval(() => {
         setRecordingSeconds((prev) => {
           if (prev >= 12) {
-            // Auto-stop after 12 seconds for safety
             stopRecording();
             return 12;
           }
@@ -229,42 +228,46 @@ export function VoiceHeroDemo() {
   const isBusy = state === "RECORDING" || state === "TRANSCRIBING" || state === "CLASSIFYING";
 
   return (
-    <div className="w-full rounded-2xl bg-[#121212]/95 border border-[#262626] p-4 sm:p-6 relative overflow-hidden text-left shadow-2xl backdrop-blur-xl">
+    <div className="w-full rounded-2xl bg-[#0e1017]/90 border border-[#232738] p-5 sm:p-7 relative overflow-hidden text-left shadow-2xl backdrop-blur-xl">
+      {/* Subtle Pastel Ambient Glow */}
+      <div className="absolute top-0 right-1/4 w-80 h-36 bg-[#d4f65b]/5 blur-3xl pointer-events-none rounded-full" />
+      <div className="absolute bottom-0 left-1/4 w-80 h-36 bg-[#ddd6fe]/5 blur-3xl pointer-events-none rounded-full" />
+
       {/* Top Status Header */}
-      <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-[#202020] mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#1f2233] mb-5">
         <div className="flex items-center gap-2.5">
           <div className="relative flex items-center justify-center">
             <span
               className={`w-2.5 h-2.5 rounded-full ${
                 state === "RECORDING"
-                  ? "bg-[#ff453a] animate-ping"
+                  ? "bg-[#fda4af] animate-ping"
                   : state === "DONE"
-                  ? "bg-[#34c759]"
-                  : "bg-[#d7f24a] animate-pulse"
+                  ? "bg-[#86efac]"
+                  : "bg-[#d4f65b] animate-pulse"
               }`}
             />
             <span
               className={`w-2 h-2 rounded-full absolute ${
                 state === "RECORDING"
-                  ? "bg-[#ff453a]"
+                  ? "bg-[#fda4af]"
                   : state === "DONE"
-                  ? "bg-[#34c759]"
-                  : "bg-[#d7f24a]"
+                  ? "bg-[#86efac]"
+                  : "bg-[#d4f65b]"
               }`}
             />
           </div>
-          <span className="text-xs font-mono font-bold text-[#f1f1ef] uppercase tracking-wider">
-            VOICE_PIPELINE // LIVE_API_TEST
+          <span className="text-xs font-mono font-bold tracking-widest text-[#f8f8f6] uppercase">
+            VOICE_PIPELINE // HARVESTER_DEMO
           </span>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] font-mono text-[#888888] bg-[#181818] px-2 py-0.5 rounded border border-[#2b2b2b] flex items-center gap-1">
-            <Cpu className="w-3 h-3 text-[#d7f24a]" />
-            ELEVENLABS + GEMINI 3.5
+          <span className="text-[10px] font-mono text-[#94a3b8] bg-[#141622] px-2.5 py-1 rounded-full border border-[#272b3e] flex items-center gap-1.5">
+            <Cpu className="w-3 h-3 text-[#ddd6fe]" />
+            <span>ELEVENLABS + GEMINI</span>
           </span>
-          <span className="text-[10px] font-mono text-[#34c759] bg-[#152418] px-2 py-0.5 rounded border border-[#27442d]">
-            ONLINE
+          <span className="text-[10px] font-mono text-[#86efac] bg-[#14231b] px-2 py-0.5 rounded-full border border-[#284837] font-semibold">
+            LIVE API
           </span>
         </div>
       </div>
@@ -277,7 +280,7 @@ export function VoiceHeroDemo() {
             <button
               type="button"
               onClick={stopRecording}
-              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#ff453a]/25 border-[#ff453a] text-[#ff453a] hover:bg-[#ff453a]/35 shadow-[0_0_25px_rgba(255,69,58,0.35)] animate-pulse cursor-pointer"
+              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#fda4af]/20 border-[#fda4af] text-[#fda4af] hover:bg-[#fda4af]/30 shadow-[0_0_30px_rgba(253,164,175,0.3)] animate-pulse cursor-pointer"
             >
               <Square className="w-4 h-4 fill-current" />
               <span>STOP & CLASSIFY ({recordingSeconds}s)</span>
@@ -287,87 +290,107 @@ export function VoiceHeroDemo() {
               type="button"
               onClick={startRecording}
               disabled={isBusy}
-              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#1b1b1b] border-[#333333] hover:border-[#d7f24a] text-[#f1f1ef] hover:bg-[#222222] shadow-[0_0_20px_rgba(0,0,0,0.5)] cursor-pointer disabled:opacity-50"
+              className="w-full px-5 py-4 rounded-xl border font-mono text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2.5 transition-all bg-[#151824] border-[#2d3246] hover:border-[#d4f65b] text-[#f8f8f6] hover:bg-[#1a1e2d] hover:shadow-[0_0_25px_rgba(212,246,91,0.2)] cursor-pointer disabled:opacity-50"
             >
-              <Mic className="w-4 h-4 text-[#d7f24a]" />
+              <Mic className="w-4 h-4 text-[#d4f65b]" />
               <span>RECORD YOUR VOICE</span>
             </button>
           )}
 
-          <p className="text-[11px] font-mono text-[#666666] text-center">
+          <p className="text-[11px] font-mono text-[#94a3b8] text-center">
             {state === "RECORDING"
-              ? "Speaking now... Tap to end."
-              : "Speak freely — Gemini will rate urgency."}
+              ? "Speaking now... Tap to finish."
+              : "Speak once — AI extracts signal & urgency."}
           </p>
         </div>
 
         {/* Middle/Right: Audio Waveform & Real-Time Pipeline Progress */}
-        <div className="flex-1 bg-[#0c0c0c] p-4 rounded-xl border border-[#202020] flex flex-col justify-between min-h-[90px]">
+        <div className="flex-1 bg-[#090b10] p-4 rounded-xl border border-[#1e2233] flex flex-col justify-between min-h-[96px]">
           {/* Animated visual state bar */}
           <div className="flex items-center gap-3">
-            {/* Audio Wave Bars */}
-            <div className="flex items-center gap-1 h-6 shrink-0">
+            {/* Dynamic Multi-Pastel Wave Bars */}
+            <div className="flex items-center gap-1.5 h-6 shrink-0">
               <span
-                className={`w-1 bg-[#d7f24a] rounded-full transition-all ${
-                  state === "RECORDING" ? "wave-bar-1" : isBusy ? "wave-bar-3 opacity-60" : "h-2 opacity-30"
+                className={`w-1.5 rounded-full transition-all ${
+                  state === "RECORDING"
+                    ? "bg-[#d4f65b] wave-bar-1"
+                    : isBusy
+                    ? "bg-[#d4f65b] wave-bar-3 opacity-70"
+                    : "bg-[#282d40] h-2"
                 }`}
               />
               <span
-                className={`w-1 bg-[#d7f24a] rounded-full transition-all ${
-                  state === "RECORDING" ? "wave-bar-2" : isBusy ? "wave-bar-4 opacity-60" : "h-4 opacity-30"
+                className={`w-1.5 rounded-full transition-all ${
+                  state === "RECORDING"
+                    ? "bg-[#7dd3fc] wave-bar-2"
+                    : isBusy
+                    ? "bg-[#7dd3fc] wave-bar-4 opacity-70"
+                    : "bg-[#282d40] h-4"
                 }`}
               />
               <span
-                className={`w-1 bg-[#d7f24a] rounded-full transition-all ${
-                  state === "RECORDING" ? "wave-bar-3" : isBusy ? "wave-bar-2 opacity-60" : "h-3 opacity-30"
+                className={`w-1.5 rounded-full transition-all ${
+                  state === "RECORDING"
+                    ? "bg-[#ddd6fe] wave-bar-3"
+                    : isBusy
+                    ? "bg-[#ddd6fe] wave-bar-2 opacity-70"
+                    : "bg-[#282d40] h-3"
                 }`}
               />
               <span
-                className={`w-1 bg-[#d7f24a] rounded-full transition-all ${
-                  state === "RECORDING" ? "wave-bar-4" : isBusy ? "wave-bar-5 opacity-60" : "h-5 opacity-30"
+                className={`w-1.5 rounded-full transition-all ${
+                  state === "RECORDING"
+                    ? "bg-[#fba4af] wave-bar-4"
+                    : isBusy
+                    ? "bg-[#fba4af] wave-bar-5 opacity-70"
+                    : "bg-[#282d40] h-5"
                 }`}
               />
               <span
-                className={`w-1 bg-[#d7f24a] rounded-full transition-all ${
-                  state === "RECORDING" ? "wave-bar-5" : isBusy ? "wave-bar-1 opacity-60" : "h-2 opacity-30"
+                className={`w-1.5 rounded-full transition-all ${
+                  state === "RECORDING"
+                    ? "bg-[#86efac] wave-bar-5"
+                    : isBusy
+                    ? "bg-[#86efac] wave-bar-1 opacity-70"
+                    : "bg-[#282d40] h-2"
                 }`}
               />
             </div>
 
             {/* Dynamic Status Text */}
-            <div className="text-xs font-mono text-[#888888] truncate flex-1">
+            <div className="text-xs font-mono text-[#94a3b8] truncate flex-1">
               {state === "RECORDING" ? (
-                <span className="text-[#ff453a] flex items-center gap-1.5 font-bold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#ff453a] animate-ping" />
-                  Capturing raw audio stream [{recordingSeconds}s]...
+                <span className="text-[#fda4af] flex items-center gap-1.5 font-bold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#fda4af] animate-ping" />
+                  Streaming live speech input [{recordingSeconds}s]...
                 </span>
               ) : state === "TRANSCRIBING" ? (
-                <span className="text-[#d7f24a] flex items-center gap-1.5">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#d7f24a]" />
+                <span className="text-[#d4f65b] flex items-center gap-1.5">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#d4f65b]" />
                   [1/2] ElevenLabs Scribe converting audio to tokens...
                 </span>
               ) : state === "CLASSIFYING" ? (
-                <span className="text-[#64d2ff] flex items-center gap-1.5">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#64d2ff]" />
+                <span className="text-[#ddd6fe] flex items-center gap-1.5">
+                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#ddd6fe]" />
                   [2/2] Google Gemini inferring urgency & half-life window...
                 </span>
               ) : state === "DONE" ? (
-                <span className="text-[#34c759] flex items-center gap-1.5 font-bold">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#34c759]" />
-                  Triage Complete ({result?.metrics.durationMs}ms)
+                <span className="text-[#86efac] flex items-center gap-1.5 font-bold">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#86efac]" />
+                  Triage Complete in {result?.metrics.durationMs}ms
                 </span>
               ) : (
-                <span className="text-[#666666]">
-                  Ready. Record audio or click a tactical preset below to run live API test.
+                <span className="text-[#64748b]">
+                  Ready. Record audio or click a preset below for instant AI classification.
                 </span>
               )}
             </div>
           </div>
 
-          {/* Quick preset scenario buttons */}
-          <div className="mt-3 pt-3 border-t border-[#1a1a1a] flex flex-wrap items-center gap-1.5">
-            <span className="text-[10px] font-mono text-[#666666] uppercase mr-1">
-              Live Presets:
+          {/* Quick preset scenario buttons with Bright Pastel Accents */}
+          <div className="mt-3 pt-3 border-t border-[#181b2a] flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] font-mono text-[#64748b] uppercase mr-1">
+              Sample Scenarios:
             </span>
             {PRESET_SCENARIOS.map((preset) => (
               <button
@@ -375,7 +398,7 @@ export function VoiceHeroDemo() {
                 type="button"
                 onClick={() => handlePresetSelect(preset.text)}
                 disabled={isBusy}
-                className="px-2 py-0.5 rounded bg-[#161616] hover:bg-[#202020] border border-[#2b2b2b] hover:border-[#444444] text-[11px] font-mono text-[#cccccc] hover:text-[#f1f1ef] transition-colors flex items-center gap-1 disabled:opacity-50"
+                className="px-2.5 py-1 rounded-full bg-[#12141e] hover:bg-[#181b29] border border-[#24283b] hover:border-[#3d4461] text-[11px] font-mono text-[#cbd5e1] hover:text-[#f8f8f6] transition-all flex items-center gap-1.5 disabled:opacity-50"
               >
                 <span
                   className="w-1.5 h-1.5 rounded-full"
@@ -390,7 +413,7 @@ export function VoiceHeroDemo() {
 
       {/* Error Notice */}
       {errorMessage && (
-        <div className="mt-4 p-3 bg-[#241212] border border-[#441a1a] rounded-xl flex items-center gap-2 text-xs font-mono text-[#ff8075]">
+        <div className="mt-4 p-3.5 bg-[#25151b] border border-[#4d232c] rounded-xl flex items-center gap-2 text-xs font-mono text-[#fda4af]">
           <AlertTriangle className="w-4 h-4 shrink-0" />
           <span>{errorMessage}</span>
         </div>
@@ -398,54 +421,54 @@ export function VoiceHeroDemo() {
 
       {/* Live Result Card (Returned by Real Gemini API) */}
       {result && (
-        <div className="mt-5 p-4 rounded-xl bg-[#0e0e0e] border border-[#2e2e2e] shadow-xl animate-in fade-in slide-in-from-top-3 duration-300">
-          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-[#202020] mb-3">
+        <div className="mt-5 p-5 rounded-xl bg-[#0c0d13] border border-[#25293d] shadow-2xl animate-in fade-in slide-in-from-top-3 duration-300">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-[#1b1f30] mb-3.5">
             <div className="flex items-center gap-2">
               {result.classification.priority === "CRITICAL" ? (
-                <ShieldAlert className="w-4 h-4 text-[#ff453a]" />
+                <ShieldAlert className="w-4 h-4 text-[#fda4af]" />
               ) : result.classification.priority === "HIGH" ? (
-                <AlertTriangle className="w-4 h-4 text-[#ff9f0a]" />
+                <AlertTriangle className="w-4 h-4 text-[#fdba74]" />
               ) : (
-                <Radio className="w-4 h-4 text-[#d7f24a]" />
+                <Radio className="w-4 h-4 text-[#d4f65b]" />
               )}
               <span
-                className="font-mono text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded"
+                className="font-mono text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
                 style={{
                   backgroundColor:
                     result.classification.priority === "CRITICAL"
-                      ? "rgba(255,69,58,0.2)"
+                      ? "rgba(253,164,175,0.18)"
                       : result.classification.priority === "HIGH"
-                      ? "rgba(255,159,10,0.2)"
-                      : "rgba(215,242,74,0.15)",
+                      ? "rgba(253,186,116,0.18)"
+                      : "rgba(212,246,91,0.15)",
                   color:
                     result.classification.priority === "CRITICAL"
-                      ? "#ff453a"
+                      ? "#fda4af"
                       : result.classification.priority === "HIGH"
-                      ? "#ff9f0a"
-                      : "#d7f24a",
+                      ? "#fdba74"
+                      : "#d4f65b",
                   border: `1px solid ${
                     result.classification.priority === "CRITICAL"
-                      ? "rgba(255,69,58,0.4)"
+                      ? "rgba(253,164,175,0.4)"
                       : result.classification.priority === "HIGH"
-                      ? "rgba(255,159,10,0.4)"
-                      : "rgba(215,242,74,0.3)"
+                      ? "rgba(253,186,116,0.4)"
+                      : "rgba(212,246,91,0.35)"
                   }`,
                 }}
               >
                 {result.classification.priority} // {result.classification.category}
               </span>
 
-              <span className="font-mono text-xs text-[#888888]">
+              <span className="font-mono text-xs text-[#94a3b8]">
                 URGENCY:{" "}
-                <span className="text-[#f1f1ef] font-bold">
+                <span className="text-[#f8f8f6] font-bold">
                   {result.classification.urgencyScore}/100
                 </span>
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-[11px] font-mono text-[#777777]">
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3 text-[#d7f24a]" />
+            <div className="flex items-center gap-3 text-[11px] font-mono text-[#94a3b8]">
+              <span className="flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#131520] border border-[#24293c]">
+                <Clock className="w-3 h-3 text-[#d4f65b]" />
                 HALF-LIFE: {result.classification.expiresInMinutes}m
               </span>
               <span>// {result.metrics.durationMs}ms</span>
@@ -453,21 +476,21 @@ export function VoiceHeroDemo() {
           </div>
 
           {/* AI Summary and Spoken Words */}
-          <div className="space-y-2">
-            <div>
-              <span className="font-mono text-[10px] text-[#777777] uppercase block mb-0.5">
+          <div className="space-y-2.5">
+            <div className="p-3 rounded-lg bg-[#11131c] border border-[#202538]">
+              <span className="font-mono text-[10px] text-[#ddd6fe] uppercase font-bold tracking-wider block mb-1">
                 Gemini 3.5 Triage Summary:
               </span>
-              <p className="font-mono text-sm text-[#f1f1ef] font-semibold">
+              <p className="font-mono text-sm text-[#f8f8f6] font-semibold leading-relaxed">
                 &ldquo;{result.classification.summary}&rdquo;
               </p>
             </div>
 
-            <div className="pt-2 border-t border-[#1a1a1a]">
-              <span className="font-mono text-[10px] text-[#555555] uppercase block mb-0.5">
-                Speech-To-Text Raw Transcript:
+            <div className="px-3 pt-1">
+              <span className="font-mono text-[10px] text-[#64748b] uppercase block mb-0.5">
+                ElevenLabs Speech-To-Text Output:
               </span>
-              <p className="font-mono text-xs text-[#999999] italic">
+              <p className="font-mono text-xs text-[#94a3b8] italic">
                 {result.transcript}
               </p>
             </div>

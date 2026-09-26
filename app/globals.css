@@ -3,19 +3,25 @@
 @tailwind utilities;
 
 :root {
-  --background: #0e0e0e;
-  --surface: #151515;
-  --surface-hover: #191919;
-  --surface-elevated: #1f1f1f;
-  --border: #292929;
-  --border-subtle: #1e1e1e;
-  --primary-text: #f1f1ef;
-  --secondary-text: #999999;
-  --accent: #d7f24a;
+  --background: #08090b;
+  --surface: #0f1015;
+  --surface-card: #14151d;
+  --surface-hover: #191b24;
+  --surface-elevated: #1f222f;
+  --border: #232634;
+  --border-subtle: #181a24;
+  --border-bright: #2f3446;
+  --primary-text: #f8f8f6;
+  --secondary-text: #94a3b8;
+  --accent: #d4f65b;
 }
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
 }
 
 body {
@@ -26,41 +32,53 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  background-image: 
+    radial-gradient(ellipse 90% 70% at 50% -25%, rgba(212, 246, 91, 0.04), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 85% 10%, rgba(221, 214, 254, 0.03), transparent 50%),
+    radial-gradient(ellipse 60% 50% at 15% 30%, rgba(125, 211, 252, 0.02), transparent 50%);
 }
 
-/* Custom scrollbar for technical editorial feel */
+/* Fine Tactical Dot Matrix Grid Pattern */
+.bg-tactical-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Custom Sleek Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0e0e0e;
+  background: #08090b;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #262626;
-  border-radius: 3px;
+  background: #232634;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #363636;
+  background: #3e4459;
 }
 
-/* Subtle pulse animation for critical items */
+/* Pulse animation for critical items */
 @keyframes critical-pulse {
   0%, 100% {
     opacity: 1;
     transform: scale(1);
+    box-shadow: 0 0 12px rgba(253, 164, 175, 0.6);
   }
   50% {
-    opacity: 0.4;
-    transform: scale(0.92);
+    opacity: 0.45;
+    transform: scale(0.9);
+    box-shadow: 0 0 2px rgba(253, 164, 175, 0.2);
   }
 }
 
 .critical-indicator {
-  animation: critical-pulse 1.8s ease-in-out infinite;
+  animation: critical-pulse 1.6s ease-in-out infinite;
 }
 
 /* Audio Waveform Bar Animation */
@@ -69,7 +87,7 @@ body {
     height: 15%;
   }
   50% {
-    height: 90%;
+    height: 95%;
   }
   100% {
     height: 25%;
@@ -98,7 +116,7 @@ body {
   animation: ring-expand 1.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
 }
 
-/* Screen Flash Animations for Incoming Broadcasts */
+/* Screen Flash Animations for Incoming Broadcasts (Bright Pastel Tuned) */
 @keyframes flash-strobe-critical {
   0% { opacity: 0; }
   10% { opacity: 0.95; }
@@ -145,4 +163,3 @@ body {
 .screen-flash-low {
   animation: flash-pulse-low 0.55s ease-out forwards;
 }
-

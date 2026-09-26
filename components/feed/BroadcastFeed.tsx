@@ -221,13 +221,13 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
       />
 
       {/* Tactical Alert & Haptics Simulator Bar */}
-      <div className="flex items-center justify-between px-3 py-2 bg-[#121212] border border-[#202020] rounded-lg">
+      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0e1017] border border-[#212433] rounded-xl">
         <div className="flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5 text-[#d7f24a]" />
-          <span className="font-mono text-[11px] text-[#888888]">
+          <Zap className="w-3.5 h-3.5 text-[#d4f65b]" />
+          <span className="font-mono text-[11px] text-[#94a3b8]">
             HAPTIC & SCREEN FLASH ALERTS:
           </span>
-          <span className="font-mono text-[10px] text-[#34c759] bg-[#1a2d1f] px-1.5 py-0.5 rounded border border-[#2b4c34]">
+          <span className="font-mono text-[10px] text-[#86efac] bg-[#14231b] px-2 py-0.5 rounded-full border border-[#284837] font-semibold">
             ACTIVE
           </span>
         </div>
@@ -235,46 +235,46 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
         <button
           type="button"
           onClick={() => setShowTestControls(!showTestControls)}
-          className="font-mono text-[11px] text-[#777777] hover:text-[#d7f24a] transition-colors flex items-center gap-1"
+          className="font-mono text-[11px] text-[#94a3b8] hover:text-[#d4f65b] transition-colors flex items-center gap-1"
         >
           <span>{showTestControls ? "[ HIDE SIMULATOR ]" : "[ TEST HAPTICS ]"}</span>
         </button>
       </div>
 
-      {/* Expanded Simulator Controls */}
+      {/* Expanded Simulator Controls (Bright Pastel Buttons) */}
       {showTestControls && (
-        <div className="p-3 bg-[#151515] border border-[#262626] rounded-lg flex flex-wrap items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-          <span className="font-mono text-[10px] text-[#777777] uppercase w-full sm:w-auto">
+        <div className="p-3.5 bg-[#12141e] border border-[#262b3d] rounded-xl flex flex-wrap items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
+          <span className="font-mono text-[10px] text-[#64748b] uppercase w-full sm:w-auto">
             Test Vibration & Flash:
           </span>
           <button
             type="button"
             onClick={() => triggerTestAlert("CRITICAL")}
-            className="px-2.5 py-1 rounded bg-[#ff453a]/20 hover:bg-[#ff453a]/30 border border-[#ff453a]/50 text-[#ff453a] font-mono text-[11px] font-bold transition-colors flex items-center gap-1"
+            className="px-3 py-1 rounded-full bg-[#fda4af]/15 hover:bg-[#fda4af]/25 border border-[#fda4af]/40 text-[#fda4af] font-mono text-[11px] font-bold transition-all flex items-center gap-1.5"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#ff453a] animate-ping" />
-            CRITICAL (RED STROBE)
+            <span className="w-1.5 h-1.5 rounded-full bg-[#fda4af] animate-ping" />
+            CRITICAL (CORAL STROBE)
           </button>
           <button
             type="button"
             onClick={() => triggerTestAlert("HIGH")}
-            className="px-2.5 py-1 rounded bg-[#ff9f0a]/20 hover:bg-[#ff9f0a]/30 border border-[#ff9f0a]/50 text-[#ff9f0a] font-mono text-[11px] font-bold transition-colors"
+            className="px-3 py-1 rounded-full bg-[#fdba74]/15 hover:bg-[#fdba74]/25 border border-[#fdba74]/40 text-[#fdba74] font-mono text-[11px] font-bold transition-all"
           >
-            HIGH (AMBER PULSE)
+            HIGH (APRICOT PULSE)
           </button>
           <button
             type="button"
             onClick={() => triggerTestAlert("NORMAL")}
-            className="px-2.5 py-1 rounded bg-[#d7f24a]/20 hover:bg-[#d7f24a]/30 border border-[#d7f24a]/50 text-[#d7f24a] font-mono text-[11px] font-bold transition-colors"
+            className="px-3 py-1 rounded-full bg-[#d4f65b]/15 hover:bg-[#d4f65b]/25 border border-[#d4f65b]/40 text-[#d4f65b] font-mono text-[11px] font-bold transition-all"
           >
-            NORMAL (LIME FLASH)
+            NORMAL (WASABI FLASH)
           </button>
           <button
             type="button"
             onClick={() => triggerTestAlert("LOW")}
-            className="px-2.5 py-1 rounded bg-[#64d2ff]/20 hover:bg-[#64d2ff]/30 border border-[#64d2ff]/50 text-[#64d2ff] font-mono text-[11px] transition-colors"
+            className="px-3 py-1 rounded-full bg-[#7dd3fc]/15 hover:bg-[#7dd3fc]/25 border border-[#7dd3fc]/40 text-[#7dd3fc] font-mono text-[11px] font-bold transition-all"
           >
-            LOW (SOFT WASH)
+            LOW (SKY WASH)
           </button>
         </div>
       )}

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Copy, Check, Radio } from "lucide-react";
+import { ArrowLeft, Copy, Check, Radio, Users, Shield } from "lucide-react";
 import { MessageWithSender, Group } from "@/lib/db";
 import { BroadcastFeed } from "./BroadcastFeed";
 import { MicrophoneButton } from "@/components/voice/MicrophoneButton";
@@ -25,40 +25,48 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
   };
 
   const handleMessageBroadcasted = (newMsg: MessageWithSender) => {
-    // Dispatches custom event to BroadcastFeed to update instantly
     if (typeof window !== "undefined") {
       window.dispatchEvent(new CustomEvent("vulture:new-broadcast", { detail: newMsg }));
     }
   };
 
   return (
-    <div className="flex flex-col min-h-[calc(100vh-3.5rem)] max-w-3xl mx-auto w-full px-4 pb-36 pt-4">
+    <div className="flex flex-col min-h-[calc(100vh-3.75rem)] max-w-4xl mx-auto w-full px-4 sm:px-6 pb-40 pt-5">
       {/* Group Header */}
-      <div className="pb-4 mb-2 border-b border-[#222222]">
-        <div className="flex items-center justify-between mb-2">
+      <div className="pb-5 mb-4 border-b border-[#212433]">
+        <div className="flex items-center justify-between mb-3">
           <Link
             href="/dashboard"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#777777] hover:text-[#cccccc] transition-colors"
+            className="inline-flex items-center gap-1.5 text-xs font-mono text-[#94a3b8] hover:text-[#f8f8f6] transition-colors group"
           >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            <span>ALL GROUPS</span>
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            <span>CHANNELS DIRECTORY</span>
           </Link>
 
           <button
             onClick={copyInviteCode}
-            className="flex items-center gap-1.5 px-2 py-1 rounded bg-[#161616] hover:bg-[#1f1f1f] text-[11px] font-mono text-[#888888] hover:text-[#cccccc] border border-[#242424] transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#12141f] hover:bg-[#181b29] text-[11px] font-mono text-[#94a3b8] hover:text-[#f8f8f6] border border-[#23273a] transition-all"
             title="Copy group invite code"
           >
-            <span>CODE: {group.inviteCode}</span>
-            {copied ? <Check className="w-3 h-3 text-[#34c759]" /> : <Copy className="w-3 h-3" />}
+            <span className="text-[#64748b]">CODE:</span>
+            <span className="text-[#d4f65b] font-bold">{group.inviteCode}</span>
+            {copied ? <Check className="w-3 h-3 text-[#86efac]" /> : <Copy className="w-3 h-3 text-[#64748b]" />}
           </button>
         </div>
 
-        <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2">
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-xl sm:text-2xl font-mono font-bold tracking-tight text-[#f1f1ef]">
-              {group.name}
-            </h1>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#141724] border border-[#272c3f] flex items-center justify-center text-[#d4f65b] shadow-sm">
+              <Radio className="w-4 h-4" />
+            </div>
+            <div>
+              <h1 className="text-xl sm:text-2xl font-mono font-extrabold tracking-tight text-[#f8f8f6]">
+                {group.name}
+              </h1>
+              <p className="text-[11px] font-mono text-[#64748b] mt-0.5">
+                VOICE BROADCAST STREAM // AI CONTEXT TRIAGE ACTIVE
+              </p>
+            </div>
           </div>
 
           <PresenceIndicator
@@ -73,9 +81,9 @@ export function GroupView({ group, initialPresence, initialMessages }: GroupView
         <BroadcastFeed groupId={group.id} initialMessages={initialMessages} />
       </main>
 
-      {/* Fixed / Floating Push-To-Talk Dock */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#0e0e0e]/95 backdrop-blur-md border-t border-[#1f1f1f] py-3 px-4 shadow-[0_-10px_25px_rgba(0,0,0,0.5)]">
-        <div className="max-w-3xl mx-auto flex flex-col items-center">
+      {/* Floating Tactical Push-To-Talk Dock */}
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#090b10]/90 backdrop-blur-2xl border-t border-[#202538] py-4 px-4 shadow-[0_-15px_35px_rgba(0,0,0,0.6)]">
+        <div className="max-w-4xl mx-auto flex flex-col items-center">
           <MicrophoneButton
             groupId={group.id}
             onMessageBroadcasted={handleMessageBroadcasted}
