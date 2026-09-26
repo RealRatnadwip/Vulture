@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 import { TEAM_MEMBERS } from "@/lib/team";
 import { TeamCard } from "@/components/team/TeamCard";
-import { TeamScroller } from "@/components/team/TeamScroller";
 import { DecaySimulator } from "@/components/landing/DecaySimulator";
 import { VoiceHeroDemo } from "@/components/landing/VoiceHeroDemo";
 

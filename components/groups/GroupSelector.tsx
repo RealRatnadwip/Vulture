@@ -177,12 +177,12 @@ export function GroupSelector({ initialGroups }: GroupSelectorProps) {
       <CreateGroupModal
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
-        onCreated={handleGroupCreated}
+        onGroupCreated={handleGroupCreated}
       />
       <JoinGroupModal
         isOpen={isJoinOpen}
         onClose={() => setIsJoinOpen(false)}
-        onJoined={handleGroupJoined}
+        onGroupJoined={handleGroupJoined}
       />
     </div>
   );
