@@ -302,9 +302,9 @@ export default function LandingPage() {
           <a href="#team" className="hover:text-[#f8f8f6] transition-colors">
             CREW
           </a>
-          <Link href="/diagnostics" className="hover:text-[#f8f8f6] transition-colors">
-            TELEMETRY
-          </Link>
+          <a href="#concepts" className="hover:text-[#f8f8f6] transition-colors">
+            ARCHITECTURE
+          </a>
         </div>
       </footer>
     </div>

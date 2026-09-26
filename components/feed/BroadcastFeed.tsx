@@ -6,7 +6,7 @@ import { MessageCard } from "./MessageCard";
 import { FeedFilters, FilterType } from "./FeedFilters";
 import { FullScreenAlert } from "@/components/mobile/FullScreenAlert";
 import { PriorityLevel } from "@/lib/validation";
-import { Radio, Zap } from "lucide-react";
+import { Radio } from "lucide-react";
 
 interface BroadcastFeedProps {
   groupId: string;
@@ -20,7 +20,6 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
   const [newestId, setNewestId] = useState<string | null>(null);
   const [loadingInitial, setLoadingInitial] = useState(initialMessages.length === 0);
   const [fullScreenAlert, setFullScreenAlert] = useState<MessageWithSender | null>(null);
-  const [showTestControls, setShowTestControls] = useState(false);
 
   const hasLoadedInitialRef = useRef(initialMessages.length > 0);
   const latestTimestampRef = useRef<string | null>(
@@ -151,25 +150,6 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
     }
   };
 
-  // Diagnostic / Preview trigger to test screen flash and vibration
-  const triggerTestAlert = (p: PriorityLevel) => {
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(
-        new CustomEvent("vulture:flash", {
-          detail: {
-            id: "test-" + Date.now(),
-            priority: p,
-            senderName: "TACTICAL SIMULATOR",
-            transcript: `Simulated ${p} priority broadcast transmission received.`,
-            summary: `Testing ${p} visual screen flash and mobile haptic response.`,
-            urgencyScore: p === "CRITICAL" ? 95 : p === "HIGH" ? 75 : p === "NORMAL" ? 45 : 15,
-            category: p === "CRITICAL" ? "SECURITY" : p === "HIGH" ? "OPS" : "ROUTINE",
-          },
-        })
-      );
-    }
-  };
-
   // Expose local broadcast handler via window event or ref if needed
   useEffect(() => {
     const handleBroadcastEvent = (e: CustomEvent) => {
@@ -219,65 +199,6 @@ export function BroadcastFeed({ groupId, initialMessages = [] }: BroadcastFeedPr
         onSearchChange={setSearchQuery}
         counts={counts}
       />
-
-      {/* Tactical Alert & Haptics Simulator Bar */}
-      <div className="flex items-center justify-between px-3.5 py-2.5 bg-[#0e1017] border border-[#212433] rounded-xl">
-        <div className="flex items-center gap-2">
-          <Zap className="w-3.5 h-3.5 text-[#d4f65b]" />
-          <span className="font-mono text-[11px] text-[#94a3b8]">
-            HAPTIC & SCREEN FLASH ALERTS:
-          </span>
-          <span className="font-mono text-[10px] text-[#86efac] bg-[#14231b] px-2 py-0.5 rounded-full border border-[#284837] font-semibold">
-            ACTIVE
-          </span>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setShowTestControls(!showTestControls)}
-          className="font-mono text-[11px] text-[#94a3b8] hover:text-[#d4f65b] transition-colors flex items-center gap-1"
-        >
-          <span>{showTestControls ? "[ HIDE SIMULATOR ]" : "[ TEST HAPTICS ]"}</span>
-        </button>
-      </div>
-
-      {/* Expanded Simulator Controls (Bright Pastel Buttons) */}
-      {showTestControls && (
-        <div className="p-3.5 bg-[#12141e] border border-[#262b3d] rounded-xl flex flex-wrap items-center gap-2 animate-in fade-in slide-in-from-top-2 duration-200">
-          <span className="font-mono text-[10px] text-[#64748b] uppercase w-full sm:w-auto">
-            Test Vibration & Flash:
-          </span>
-          <button
-            type="button"
-            onClick={() => triggerTestAlert("CRITICAL")}
-            className="px-3 py-1 rounded-full bg-[#fda4af]/15 hover:bg-[#fda4af]/25 border border-[#fda4af]/40 text-[#fda4af] font-mono text-[11px] font-bold transition-all flex items-center gap-1.5"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#fda4af] animate-ping" />
-            CRITICAL (CORAL STROBE)
-          </button>
-          <button
-            type="button"
-            onClick={() => triggerTestAlert("HIGH")}
-            className="px-3 py-1 rounded-full bg-[#fdba74]/15 hover:bg-[#fdba74]/25 border border-[#fdba74]/40 text-[#fdba74] font-mono text-[11px] font-bold transition-all"
-          >
-            HIGH (APRICOT PULSE)
-          </button>
-          <button
-            type="button"
-            onClick={() => triggerTestAlert("NORMAL")}
-            className="px-3 py-1 rounded-full bg-[#d4f65b]/15 hover:bg-[#d4f65b]/25 border border-[#d4f65b]/40 text-[#d4f65b] font-mono text-[11px] font-bold transition-all"
-          >
-            NORMAL (WASABI FLASH)
-          </button>
-          <button
-            type="button"
-            onClick={() => triggerTestAlert("LOW")}
-            className="px-3 py-1 rounded-full bg-[#7dd3fc]/15 hover:bg-[#7dd3fc]/25 border border-[#7dd3fc]/40 text-[#7dd3fc] font-mono text-[11px] font-bold transition-all"
-          >
-            LOW (SKY WASH)
-          </button>
-        </div>
-      )}
 
       {/* Feed List */}
       <div className="flex flex-col gap-3 min-h-[300px]">

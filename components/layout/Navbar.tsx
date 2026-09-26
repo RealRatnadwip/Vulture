@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Radio, Users, Activity, LogOut, Terminal, Sparkles, ShieldCheck } from "lucide-react";
+import { Radio, Users, LogOut, Terminal, Sparkles, ShieldCheck } from "lucide-react";
 
 interface NavbarProps {
   userName?: string;
@@ -61,18 +61,6 @@ export function Navbar({ userName = "Ratnadwip", avatarUrl, isDemo = true }: Nav
             >
               <Users className="w-3.5 h-3.5" />
               <span>CHANNELS</span>
-            </Link>
-
-            <Link
-              href="/diagnostics"
-              className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all hidden sm:flex items-center gap-1.5 ${
-                pathname === "/diagnostics"
-                  ? "bg-[#161822] text-[#d4f65b] font-semibold border border-[#2b3044]"
-                  : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#12141c]"
-              }`}
-            >
-              <Activity className="w-3.5 h-3.5" />
-              <span>DIAGNOSTICS</span>
             </Link>
 
             <Link
