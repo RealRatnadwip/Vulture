@@ -80,13 +80,5 @@ Visit [`http://localhost:3000`](http://localhost:3000) to see the live feed, swi
 
 ---
 
-### the team
-
-- **Ratnadwip** — Lead & Fullstack Systems
-- **Himanshu** — Frontend & Micro-Interactions
-- **Koushik** — Backend & Distributed Data
-- **Ranit** — Product & Visual Design
-
----
 
 *"Speak once. The feed sorts itself."*
