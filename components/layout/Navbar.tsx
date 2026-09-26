@@ -76,12 +76,8 @@ export function Navbar({ userName = "Ratnadwip", avatarUrl, isDemo = true }: Nav
             </Link>
 
             <Link
-              href="/team"
-              className={`px-3 py-1.5 text-xs font-mono rounded-lg transition-all flex items-center gap-1.5 ${
-                pathname === "/team"
-                  ? "bg-[#161822] text-[#ddd6fe] font-semibold border border-[#2b3044]"
-                  : "text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#12141c]"
-              }`}
+              href="/#team"
+              className="px-3 py-1.5 text-xs font-mono rounded-lg transition-all flex items-center gap-1.5 text-[#94a3b8] hover:text-[#f8f8f6] hover:bg-[#12141c]"
             >
               <span className="text-[#ddd6fe]">CREW</span>
             </Link>

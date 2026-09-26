@@ -15,6 +15,7 @@ import {
   Layers,
 } from "lucide-react";
 import { TEAM_MEMBERS } from "@/lib/team";
+import { TeamCard } from "@/components/team/TeamCard";
 import { TeamScroller } from "@/components/team/TeamScroller";
 import { DecaySimulator } from "@/components/landing/DecaySimulator";
 import { VoiceHeroDemo } from "@/components/landing/VoiceHeroDemo";
@@ -52,12 +53,12 @@ export default function LandingPage() {
           >
             // HALF-LIFE
           </a>
-          <Link
-            href="/team"
+          <a
+            href="#team"
             className="text-xs font-mono text-[#ddd6fe] hover:text-[#f8f8f6] transition-colors flex items-center gap-1"
           >
             <span>// CREW</span>
-          </Link>
+          </a>
           <Link
             href="/login"
             className="text-xs font-mono text-[#94a3b8] hover:text-[#f8f8f6] transition-colors"
@@ -107,13 +108,13 @@ export default function LandingPage() {
             <ArrowRight className="w-4 h-4" />
           </Link>
 
-          <Link
-            href="/team"
+          <a
+            href="#team"
             className="w-full sm:w-auto px-7 py-3.5 rounded-xl text-xs font-mono font-semibold tracking-wider uppercase bg-[#12141e] text-[#cbd5e1] hover:text-[#f8f8f6] hover:bg-[#181a27] border border-[#272b3c] transition-all flex items-center justify-center gap-2"
           >
             <Users className="w-4 h-4 text-[#ddd6fe]" />
             <span>MEET THE CREW</span>
-          </Link>
+          </a>
         </div>
 
         {/* Live Interactive Voice Pipeline Hero Demo */}
@@ -231,29 +232,31 @@ export default function LandingPage() {
         </section>
 
         {/* ------------------------------------------------------------- */}
-        {/* Crew / Creative Collective Scroller */}
         {/* ------------------------------------------------------------- */}
-        <section className="mt-28 w-full text-left">
+        {/* Crew / Creative Collective Section */}
+        {/* ------------------------------------------------------------- */}
+        <section id="team" className="mt-28 w-full text-left scroll-mt-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-3">
             <div>
-              <div className="flex items-center gap-2 text-xs font-mono text-[#ddd6fe] uppercase tracking-wider mb-1">
-                <Users className="w-3.5 h-3.5" />
-                <span>MEET THE CREATIVE COLLECTIVE</span>
+              <div className="flex items-center gap-2 text-xs font-mono text-[#ddd6fe] uppercase tracking-wider mb-1.5">
+                <Users className="w-3.5 h-3.5 text-[#ddd6fe]" />
+                <span>THE BUILDERS // CREATIVE MANIFEST</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-mono font-bold text-[#f8f8f6] uppercase">
-                ENGINEERED BY BUILDERS
+              <h2 className="text-2xl sm:text-4xl font-mono font-extrabold text-[#f8f8f6] uppercase tracking-tight">
+                MEET THE CREW
               </h2>
             </div>
-            <Link
-              href="/team"
-              className="text-xs font-mono text-[#d4f65b] hover:underline flex items-center gap-1"
-            >
-              <span>VIEW FULL TEAM PROFILES</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+            <p className="text-xs font-mono text-[#94a3b8] max-w-sm">
+              The cross-functional engineers and architects pioneering voice-first emergency squad broadcasting.
+            </p>
           </div>
 
-          <TeamScroller members={TEAM_MEMBERS} />
+          {/* Full Grid of Team Members */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {TEAM_MEMBERS.map((member) => (
+              <TeamCard key={member.id} member={member} />
+            ))}
+          </div>
         </section>
 
         {/* Bottom Banner */}
@@ -288,9 +291,9 @@ export default function LandingPage() {
           <Link href="/dashboard" className="hover:text-[#f8f8f6] transition-colors">
             TERMINAL
           </Link>
-          <Link href="/team" className="hover:text-[#f8f8f6] transition-colors">
+          <a href="#team" className="hover:text-[#f8f8f6] transition-colors">
             CREW
-          </Link>
+          </a>
           <Link href="/diagnostics" className="hover:text-[#f8f8f6] transition-colors">
             TELEMETRY
           </Link>
